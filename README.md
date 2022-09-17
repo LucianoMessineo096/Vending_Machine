@@ -1,6 +1,6 @@
 # Vending_Machine
 
-##Description 
+## Description 
 
 You have to implement a basic version of distributed system similar to the smart vending machines system at UniPA and coffee cApp. A set of possible functionalities is reported at the end of the document.
 The connection between users and machines is managed through a server: when a user connect to a machine the information is sent to a central server, the vending machine periodically request to the server if a user has connected/disconnected and changes its status accordingly.
@@ -21,7 +21,7 @@ Connect to machine/View status/Refill/…
 	Admin view
 		Register technicians/Register machines/Manage users/View stats/…
     
-##General Specification 
+## General Specification 
 
 the project is divided in :
 
