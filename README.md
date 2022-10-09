@@ -26,4 +26,4 @@ Connect to machine/View status/Refill/…
 the project is divided in :
 
 Backend realized with Java EE 
-Frontend realized with React
+
