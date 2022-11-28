@@ -166,7 +166,7 @@ public class PurchasesManagement extends HttpServlet {
         Refill refill = refillServices.getRefill(machineId);
         
         boolean checkQuantity = checkQuantity(product,refill,machine);
-        
+                
         if(checkQuantity){
         
             float price = product.getPrice();

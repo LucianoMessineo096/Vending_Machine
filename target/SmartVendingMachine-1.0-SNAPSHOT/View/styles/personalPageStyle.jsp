@@ -36,21 +36,11 @@
         width: 100%;
     }
 
-    
-    
     #purchases{
         
         display:none;
         padding:10px;
-        overflow: auto;
-        height: 82vh;
-    }
-    
-    #purchases thead th{
-        
-        position: relative;
-        top:0;
-        z-index: 1;  
+
     }
     
     h3{
@@ -67,8 +57,7 @@
         
         display:none;
         padding:10px;
-        overflow: auto;
-        height: 82vh;
+
     }
     
     #Products{
@@ -77,6 +66,13 @@
         padding:10px;
 
     }
+    
+    /*#purchases thead th{
+        
+        position: relative;
+        top:0;
+        z-index: 1;  
+    }*/
     
     .col-10 h3{
         
@@ -89,12 +85,58 @@
         display: none;
         
     }
+    
+    /*-------------------TABLES----------------------------------------------*/
+    
+    tbody {
+        display:block;
+        height:450px;
+        overflow:auto;
+        scrollbar-width: thin;          /* "auto" or "thin" */
+        scrollbar-color: #198754 white;   /* scroll thumb and track */ 
+    }
+    thead, tbody tr {
+        display:table;
+        width:100%;
+        table-layout:fixed;
+    }
+    
+    tbody td{
+        
+        word-break: break-all;
+    }
+    
+    thead {
+        width: calc( 100% - 1em )
+    }
+    
+    table {
+        width:400px;
+    }
+    
+    tbody::-webkit-scrollbar {
+        width: 12px;               /* width of the entire scrollbar */
+    }
+
+    tbody::-webkit-scrollbar-track {
+      background: white;        /* color of the tracking area */
+    }
+
+    tbody::-webkit-scrollbar-thumb {
+      background-color: #198754;    /* color of the scroll thumb */
+      border-radius: 20px;       /* roundness of the scroll thumb */
+      border: 3px solid white;  /* creates padding around scroll thumb */
+    }
+
     /*--------------------MACHINE------------------------------------------*/
     
     #machine-mngmt{
         
         display:none;
         padding:10px;
+        overflow: auto;
+        height: 82vh;
+
     }
     
     /*-----------------SIDENAV BTNS---------------------------------------*/

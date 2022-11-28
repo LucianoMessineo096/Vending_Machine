@@ -65,12 +65,33 @@ public class MachinesManagement extends HttpServlet {
     
     }
     
+    protected void checkMachinesCapacity(ArrayList<Machine> machines) throws SQLException{
+    
+        //looping through machines and check if machine capacity is eq 0
+        //if eq 0 then set status=disabled 
+        
+        MachineServices machineServices = new MachineServices();
+        
+        for(Machine machine : machines){
+            
+            if(machine.getActualCapacity()==0){
+            
+                machineServices.changeStatus(machine.getId(),"disabled");
+            }
+        }
+    
+    }
+    
     protected void getAllMachines(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException{
         
         MachineServices machineServices = new MachineServices();
         JSONObject Jlocation = new JSONObject();
         
         ArrayList<Machine> machines = machineServices.getMachines();
+   
+        checkMachinesCapacity(machines);
+        
+        machines= machineServices.getMachines();
         
         if(machines!=null){
             

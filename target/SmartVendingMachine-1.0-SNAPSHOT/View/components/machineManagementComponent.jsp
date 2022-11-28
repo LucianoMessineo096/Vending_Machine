@@ -185,7 +185,7 @@
         addRefill(machineId);
     });
     
-     function addRefill(machineId){
+    function addRefill(machineId){
          
         <% User currentUser = (User)session.getAttribute("currentSessionUser"); %>
             
@@ -340,14 +340,14 @@
 
         const url='/SmartVendingMachine/MachinesManagement/updateMachine';
         
-       $.post(url,data,(response)=>{
+        $.post(url,data,(response)=>{
 
-            if(response.success){
+             if(response.success){
 
-                showAllMachines();
-            }
+                 showAllMachines();
+             }
 
-        });
+         });
 
     }
         

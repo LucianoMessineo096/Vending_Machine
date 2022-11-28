@@ -11,6 +11,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="icon" href="/SmartVendingMachine/View/img/favicon-16x16.png" type="image/icon type">
         <title>SmartVendingMachine</title>
+        <!-- bootstrap and jquery -->
         <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
@@ -23,7 +24,7 @@
         <jsp:include page="/View/components/navbar.jsp"></jsp:include>
        
         <section id="main-section">
-            
+           
             <div class="card" style="width: 18rem;">
               <div class="card-body">
                 <h6 class="card-title mb-2">Accedi</h6>
@@ -135,7 +136,7 @@
         $(document).ready(()=>{
 
             login();
-
+            
         });
         
         

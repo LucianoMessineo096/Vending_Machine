@@ -15,7 +15,7 @@
                 <button id="updateUsrBtn" type="button" class="btn btn-outline-success mx-1" data-bs-toggle="modal" data-bs-target="#updateUsrModal">
                     <i class="bi bi-pencil"></i>
                 </button>
-                <button id="deletePersonalDataBtn" type="button" onclick="deleteUser" class="btn btn-outline-danger mx-1">
+                <button id="deletePersonalDataBtn" type="button" class="btn btn-outline-danger mx-1" data-bs-toggle="modal" data-bs-target="#deleteUsrModal">
                     <i class="bi bi-trash3-fill"></i>
                 </button>
             </div>
@@ -52,6 +52,24 @@
           </div>
         </div>
     </div>
+        
+    <div class="modal fade" id="deleteUsrModal" tabindex="-1" aria-labelledby="deleteUsrModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Cancellazione Utente</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Sei sicuro/a di voler eliminare il tuo account?</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button id="deleteUsrBtn" type="button" class="btn btn-primary">Save</button>
+            </div>
+          </div>
+        </div>
+    </div>
 
 </div>
 <script>
@@ -60,13 +78,18 @@
             
         $('#updateUsrSubmit').click(()=>{
 
-            updatePersonalData();
+            updateAccount();
         });
         
         
         $('#deletePersonalDataBtn').click(()=>{
             
             deletePersonalData();
+        });
+        
+        $('body').on('click','#deleteUsrBtn',()=>{
+
+            deleteAccount();
         });
 
     });
@@ -117,7 +140,7 @@
 
     }
     
-    function updatePersonalData(){
+    function updateAccount(){
     
         let validation = _validate();
         
@@ -157,7 +180,7 @@
 
             if(response.success){
                 window.location='/SmartVendingMachine/UsersManagement/personalPage';
-                <% /*currentUser = (User)request.getSession(false).getAttribute("currentSessionUser");*/ %>
+                <% currentUser = (User)request.getSession(false).getAttribute("currentSessionUser"); %>
 
             }
 
@@ -165,7 +188,7 @@
     
     }
         
-    function deletePersonalData(){
+    function deleteAccount(){
 
         const url='/SmartVendingMachine/UsersManagement/deleteUser';
         const data={
@@ -178,40 +201,14 @@
             
             if(response.success){
                 
+                const url_logout = "/SmartVendingMachine/AutenticationManagement/logout";
                 
+                $.get(url,(response)=>{
+                    
+                    window.location="/SmartVendingMachine"
+                })
             }
         })
-        //da rivedere
- 
-        fetch(url,{
-            
-            method:'POST',
-            headers:{
-                
-                'Accept':'application/json',
-                'Content-Type':'application/json'
-                
-            },
-            body: JSON.stringify(data)
-            
-        })
-        .then((response)=>{
-            
-            response.json().then((res)=>{ 
-                
-                if(res.success){
-                    
-                    const url = "/SmartVendingMachine/AutenticationManagement/logout";
-            
-                    fetch(url)
-                    .then((res)=>{window.location="/SmartVendingMachine"})
-                    
-                }
-            })
-
-        })
-        .catch((err)=>{console.log(err)})
-    
         
     }
 

@@ -15,6 +15,11 @@
         height: 100px;
     }
     
+    #products{
+        
+        margin:10px;
+    }
+    
     
     
     

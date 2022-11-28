@@ -21,6 +21,7 @@
 
        </tbody>
     </table>
+
 </div>
 <script>
     
@@ -38,7 +39,7 @@
         };
         
         $.get(url,data,(response)=>{
-
+            
            $('#purchases tbody').empty();
 
            response.purchases.forEach((purchase,index)=>{
