@@ -64,8 +64,19 @@ public class ProductsManagement extends HttpServlet {
         products.add(prod3);
         products.add(prod4);
         
+        HashMap<String,Integer> prodQuantity = new HashMap<>();
+        prodQuantity.put("prod1Id", refill.getProd1Id());
+        prodQuantity.put("prod1Quantity", refill.getProd1Quantity());
+        prodQuantity.put("prod2Id", refill.getProd2Id());
+        prodQuantity.put("prod2Quantity", refill.getProd2Quantity());
+        prodQuantity.put("prod3Id", refill.getProd3Id());
+        prodQuantity.put("prod3Quantity", refill.getProd3Quantity());
+        prodQuantity.put("prod4Id", refill.getProd4Id());
+        prodQuantity.put("prod4Quantity", refill.getProd4Quantity());
+
         Jlocation.put("success", true);
         Jlocation.put("products", products);
+        Jlocation.put("quantities", prodQuantity);
         Jlocation.put("message", "prodotti ottenuti");
         String location = Jlocation.toString();
         response.setContentType("application/json");

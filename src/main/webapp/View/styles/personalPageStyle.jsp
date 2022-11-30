@@ -74,7 +74,7 @@
         z-index: 1;  
     }*/
     
-    .col-10 h3{
+    #subTitle{
         
         border-bottom: solid;
         border-color: gainsboro;
@@ -84,6 +84,11 @@
         
         display: none;
         
+    }
+    
+    .spinner-border{
+        
+        display:none;
     }
     
     /*-------------------TABLES----------------------------------------------*/

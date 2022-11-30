@@ -19,6 +19,7 @@
            <th scope="col">CAPACITA MAX</th>
            <th scope="col">CAPACITA ATTUALE</th>
            <th scope="col">ACTIONS</th>
+           <th scope="col"> </th>
          </tr>
        </thead>
        <tbody>
@@ -112,7 +113,7 @@
      <div class="modal-dialog modal-dialog-centered">
        <div class="modal-content">
          <div class="modal-header">
-           <h1 class="modal-title fs-5" id="updateMachineModal">Modifica Macchinetta</h1>
+           <h1 class="modal-title fs-5" id="updateMachineTitle">Modifica Macchinetta</h1>
            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
          </div>
          <div class="modal-body" id="updateMachineModalBody">
@@ -150,7 +151,111 @@
     });
 
     $('body').on('click','.btn-outline-warning',(e)=>{
+        
+        getRefillStatus(e);
+        
+    });
 
+    $('#addRefillSubmit').click((e)=>{
+
+        let parents = $(e.currentTarget).parents();
+        let machineId = $(parents[1]).attr('machineId');
+
+        addRefill(machineId);
+    });
+    
+    $('#updateMachineModal').on('hidden.bs.modal', function () {
+        
+        $('#updateMachineTitle .badge').remove(); 
+        
+    }) 
+    
+    //-------------------------------------------------------------------------
+    
+    function addRefillValidation(){
+        
+        let prod1Id = $('#productId1-field').val();
+        let prod1Quantity = $('#product1quantity-field').val();
+        let prod2Id = $('#productId2-field').val();
+        let prod2Quantity = $('#product2quantity-field').val();
+        let prod3Id = $('#productId3-field').val();
+        let prod3Quantity = $('#product3quantity-field').val();
+        let prod4Id = $('#productId4-field').val();
+        let prod4Quantity = $('#product4quantity-field').val();
+        
+        $('#productId1-field').removeClass('is-invalid');
+        $('#product1quantity-field').removeClass('is-invalid');
+        $('#productId2-field').removeClass('is-invalid');
+        $('#product2quantity-field').removeClass('is-invalid');
+        $('#productId3-field').removeClass('is-invalid');
+        $('#product3quantity-field').removeClass('is-invalid');
+        $('#productId4-field').removeClass('is-invalid');
+        $('#product4quantity-field').removeClass('is-invalid');
+        
+        let validation=true;
+
+        if(prod1Id===''){
+
+            $("#productId1-field").addClass('is-invalid');
+
+            validation=false;
+        }
+        
+        if(prod1Quantity===''){
+
+            $("#product1quantity-field").addClass('is-invalid');
+
+            validation=false;
+        }
+        
+        if(prod2Id===''){
+
+            $("#productId2-field").addClass('is-invalid');
+
+            validation=false;
+        }
+        
+        if(prod2Quantity===''){
+
+            $("#product2quantity-field").addClass('is-invalid');
+
+            validation=false;
+        }
+        
+        if(prod3Id===''){
+
+            $("#productId3-field").addClass('is-invalid');
+
+            validation=false;
+        }
+        
+        if(prod3Quantity===''){
+
+            $("#product3quantity-field").addClass('is-invalid');
+
+            validation=false;
+        }
+        
+        if(prod4Id===''){
+
+            $("#productId4-field").addClass('is-invalid');
+
+            validation=false;
+        }
+        
+        if(prod4Quantity===''){
+
+            $("#product4quantity-field").addClass('is-invalid');
+
+            validation=false;
+        }
+        
+
+        return validation;
+    }
+    
+    function getRefillStatus(e){
+        
         let parents = $(e.currentTarget).parents();
         let machineId= parseInt(parents[1].id);
 
@@ -175,15 +280,7 @@
             
             
         });
-    });
-
-    $('#addRefillSubmit').click((e)=>{
-
-        let parents = $(e.currentTarget).parents();
-        let machineId = $(parents[1]).attr('machineId');
-
-        addRefill(machineId);
-    });
+    }
     
     function addRefill(machineId){
          
@@ -204,7 +301,7 @@
 
         };
 
-        if(!checkIfInputFieldIsBlank(data)){
+        if(addRefillValidation()){
 
             const url="/SmartVendingMachine/RefillsManagement/addRefill";
 
@@ -217,43 +314,51 @@
                 }
             });
 
-        }else{
-
-            alert('compilare tutti i campi obbligatori');
         }
 
     }
     
     function showAllMachines(){
-            
+        
+        $('.spinner-border').css('display','block');
         clearInterface();
 
         const url="/SmartVendingMachine/MachinesManagement/getAll";
         
         $.get(url,(response)=>{
-
+            
             if(response.success){
 
                 $('#machine-mngmt tbody').empty();
 
                 response.machines.forEach(machine=>{
-
+                    
+                    let message= machine.actualCapacity==0 ? '<span class="badge rounded-pill text-bg-danger">Da rifornire</span>' : "";
+                    let updateBtnEnabled = '<button id="updateMachineBtn" type="button" class="btn btn-outline-success mx-1" data-bs-toggle="modal" data-bs-target="#updateMachineModal">'+
+                                                '<i class="bi bi-pencil"></i>'+
+                                            '</button>';
+                    let updateBtnDisabled = '<button id="updateMachineBtn" type="button" class="btn btn-outline-success mx-1" data-bs-toggle="modal" data-bs-target="#updateMachineModal" disabled>'+
+                                                '<i class="bi bi-pencil"></i>'+
+                                            '</button>';
+                                    
+                    let updateBtn = machine.actualCapacity==0 ? updateBtnDisabled : updateBtnEnabled;                
+                    
                     let record = '<tr id='+machine.id.toString()+'>'+'<td>'+machine.id.toString()+'</td>'+
                                  '<td>'+machine.name.toString()+'</td>'+
                                  '<td>'+machine.status.toString()+'</td>'+
                                  '<td>'+machine.maxCapacity.toString()+'</td>'+
                                  '<td>'+machine.actualCapacity.toString()+'</td>'+
                                  '<td>'+
-                                     '<button id="refillMachineBtn" type="button" class="btn btn-outline-warning mx-1"data-bs-toggle="modal" data-bs-target="#addRefillModal">'+
+                                     '<button id="refillMachineBtn" type="button" class="btn btn-outline-warning mx-1" data-bs-toggle="modal" data-bs-target="#addRefillModal">'+
                                          '<i class="bi bi-fuel-pump"></i>'+
                                      '</button>'+
-                                     '<button id="updateMachineBtn" type="button" class="btn btn-outline-success mx-1" data-bs-toggle="modal" data-bs-target="#updateMachineModal">'+
-                                         '<i class="bi bi-pencil"></i>'+
-                                     '</button>'+
+                                     updateBtn
+                                     +
                                      '<button id="deleteMachineBtn" type="button" onclick="deleteMachine" class="btn btn-outline-danger mx-1">'+
                                          '<i class="bi bi-trash3-fill"></i>'+
                                      '</button>'+
                                  '</td>'+
+                                 '<td>'+message+'</td>'+
                           '</tr>';
 
                     $('#machine-mngmt tbody').append(record);
@@ -261,7 +366,7 @@
                });
 
                $('#machine-mngmt').css('display','block');
-
+               $('.spinner-border').css('display','none');
             } 
         });
 
@@ -343,8 +448,11 @@
         $.post(url,data,(response)=>{
 
              if(response.success){
+                 
+                $('#updateMachineTitle .badge').remove();                
+                $('#updateMachineTitle').append('<span class="badge rounded-pill text-bg-success mx-2">'+response.message+'</span>'); 
 
-                 showAllMachines();
+                showAllMachines();
              }
 
          });
@@ -363,8 +471,6 @@
         };
         
         $.post(url,data,(response)=>{
-
-            alert(response.message);
 
             showAllMachines();
         });
@@ -415,7 +521,7 @@
         var count=0;
         
         $("#addRefillModal form ").find(':input').each(function(index){
-            
+                        
             if(index%2==0){
                 
                 productId==$(this).val() ? count++ : count;                
@@ -428,35 +534,37 @@
         
     }
         
-    function checkProdId(domElmnt){
+    function checkProdId(domElm){
 
-        let productId = $(domElmnt).val();
+        let productId = $(domElm).val();
         
-        console.log(prodIdIsRepeated(productId));
-        
-        if(!prodIdIsRepeated(productId)){
+        if(productId!==''){
             
-            if(productId!==''){
+            if(!prodIdIsRepeated(productId)){
 
-                const url="/SmartVendingMachine/ProductsManagement/getProduct";
-                const data={productId:productId};
-                
-                $.get(url,data,(response)=>{
+                if(productId!==''){
 
-                    if(response.success===false){
+                    const url="/SmartVendingMachine/ProductsManagement/getProduct";
+                    const data={productId:productId};
 
-                        alert('il prodotto: '+productId+' non esiste!');
+                    $.get(url,data,(response)=>{
 
-                        $(domElmnt).val('');
-                    }
-                });
+                        if(response.success===false){
+
+                            alert('il prodotto: '+productId+' non esiste!');
+
+                            $(domElmnt).val('');
+                        }
+                    });
+
+                }
 
             }
-            
-        }
-        else{
-            
-            alert('il prodotto '+productId+' non puo essere inserito piu di una volta');
+            else{
+
+                alert('il prodotto '+productId+' non puo essere inserito piu di una volta');
+
+            }
             
         }
 

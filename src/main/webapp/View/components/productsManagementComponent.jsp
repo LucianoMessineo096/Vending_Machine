@@ -63,7 +63,7 @@
      <div class="modal-dialog modal-dialog-centered">
        <div class="modal-content">
          <div class="modal-header">
-           <h1 class="modal-title fs-5" id="updateProductModal">Modifica Prodotto</h1>
+           <h1 class="modal-title fs-5" id="updateProductTitle">Modifica Prodotto</h1>
            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
          </div>
          <div class="modal-body" id="updateProductModalBody">
@@ -100,8 +100,17 @@
         updateProduct();
     });
     
+    $('#updateProductModal').on('hidden.bs.modal', function () {
+        
+        $('#updateProductTitle .badge').remove(); 
+        
+    }) 
+    
+    //------------------------------------------------------------------------
+    
     function showAllProducts(){
-            
+        
+        $('.spinner-border').css('display','block');
         clearInterface();
 
         const url='/SmartVendingMachine/ProductsManagement/getAll';
@@ -135,6 +144,7 @@
                 });
 
                 $('#Products').css('display','block');
+                $('.spinner-border').css('display','none');
             }
 
         });
@@ -223,6 +233,9 @@
         $.post(url,data,(response)=>{
 
             if(response.success){
+                
+                $('#updateProductTitle .badge').remove();                
+                $('#updateProductTitle').append('<span class="badge rounded-pill text-bg-success mx-2">'+response.message+'</span>'); 
 
                 showAllProducts();
             }

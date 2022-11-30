@@ -125,6 +125,8 @@
         
         if(validation){
             
+            $('.offcanvas-body .alert').remove();
+            
             const url ='/SmartVendingMachine/UsersManagement/Wallet/updateBalance';
             const data = {
 
@@ -133,9 +135,10 @@
             };
 
             $.post(url,data,(response)=>{
-
-               alert(response.message);
-               showWallet();
+                
+                $(".offcanvas-body").append('<div class="alert alert-success mt-2" role="alert">'+response.message+'</div>');
+               
+                showWallet();
             });
             
         }

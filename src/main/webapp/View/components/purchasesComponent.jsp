@@ -27,6 +27,8 @@
     
     function showPurchases(){
         
+        $('.spinner-border').css('display','block');
+        
         clearInterface();
 
         <%  User currentUser = (User)session.getAttribute("currentSessionUser"); %>
@@ -56,7 +58,7 @@
            });
 
            $('#purchases').css('display','block');
-
+           $('.spinner-border').css('display','none');
         });
     }
 </script>

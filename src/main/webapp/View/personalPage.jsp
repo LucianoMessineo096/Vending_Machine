@@ -42,9 +42,13 @@
             <div class="col-10">
                 
                 <%  User currentUser = (User)session.getAttribute("currentSessionUser"); %>
+                <div id="subTitle" class="d-flex flex-row justify-content-between">
+                    <h3>Benvenuto/a <%= currentUser.getName().toUpperCase() +" "+ currentUser.getSurname().toUpperCase() %></h3>
+                    <div class="spinner-border text-success my-2" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
                 
-                <h3>Benvenuto/a <%= currentUser.getName().toUpperCase() +" "+ currentUser.getSurname().toUpperCase() %></h3>
-  
                 <jsp:include page="/View/components/personalDataComponent.jsp"></jsp:include>
     
                 <div id="machineConnectionSection"> 
@@ -198,6 +202,7 @@
 
         function showMachinesCard(){
             
+            $('.spinner-border').css('display','block');
             clearInterface();
             
             const url="/SmartVendingMachine/MachinesManagement/getAll";
@@ -233,7 +238,7 @@
                    });
                    
                    $('#machineConnectionSection').css('display','block');
-                   
+                   $('.spinner-border').css('display','none');
                 } 
             });
            

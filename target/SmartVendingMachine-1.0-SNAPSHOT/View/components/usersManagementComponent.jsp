@@ -54,8 +54,17 @@
         showUpdateUserPanel(e);
     });
     
+    $('#updateUserModal').on('hidden.bs.modal', function () {
+        
+        $('.modal-title .badge').remove(); 
+        
+    }) 
+    
+    //-------------------------------------------------------------------------
+    
     function showAllUsers(){
-
+        
+        $('.spinner-border').css('display','block');
         clearInterface();
 
         const url='/SmartVendingMachine/UsersManagement/getAllUsers';
@@ -93,6 +102,7 @@
             });
 
             $('#Users').css('display','block');
+            $('.spinner-border').css('display','none');
         });
 
     }
@@ -113,8 +123,12 @@
         $.post(url,data,(response)=>{
 
             if(response.success){
+                
+                $('.modal-title .badge').remove();                
+                $('.modal-title').append('<span class="badge rounded-pill text-bg-success mx-2">'+response.message+'</span>');
 
                 showAllUsers();
+
             }
 
         });
@@ -132,8 +146,6 @@
         };
 
         $.post(url,data,(response)=>{
-
-            alert(response.message);
 
             showAllUsers();
         });

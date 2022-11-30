@@ -34,116 +34,136 @@
             
         </section>
         
+        <div class="modal fade" id="purchaseModal" tabindex="-1" aria-labelledby="updateMachineLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="updateMachineTitle">Acquisto Effettuato</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+            </div>
+          </div>
+        </div>
         
     </body>
     <script>
                 
         $(document).ready(()=>{
             
-            //variables
-            var products=[];
+            getMachineProducts();
+            
+            //-------Purchase
+            
+            $('body').on('click','#Purchase-btn',(e)=>{
+                
+                
+                let card= $(event.target).parents()[3];
+                let id=$(card).attr('id');
+                Purchase(id);
+                
+            });
+
+        });
+        
+        //--------------------------------------------------------------------
+        
+        function setQuantity(quantities,product){
+            
+            console.log(quantities)
+            console.log(product.id)
+            
+            let quantity=0;
+            
+            if(product.id==quantities.prod1Id){
+                
+                quantity=quantities.prod1Quantity;
+
+            }else if(product.id==quantities.prod2Id){
+                                
+                quantity=quantities.prod2Quantity;
+ 
+            }else if(product.id==quantities.prod3Id){
+                                
+                quantity=quantities.prod3Quantity;
+                
+            }else{
+                                
+                quantity=quantities.prod4Quantity;
+ 
+            }
+            
+            return quantity;
+            
+        }
+        
+        function setProductImg(typology){
+                        
+            let cardImg;
+            let imgCoffe = '<img src="View/img/coffee-cup.png" class="img-fluid rounded-start" alt="...">';
+            let imgWater = '<img src="View/img/water.png" class="img-fluid rounded-start" alt="...">';
+            let imgDrink = '<img src="View/img/coke.png" class="img-fluid rounded-start" alt="...">';
+            let imgSnack = '<img src="View/img/snack.png" class="img-fluid rounded-start" alt="...">';
+            
+            if(typology==='coffe'){
+                        
+                cardImg = imgCoffe;
+
+            }else if(typology==='water'){
+
+                cardImg = imgWater;
+
+            }else if(typology==='drink'){
+
+                cardImg = imgDrink;
+
+            }else{
+
+                cardImg = imgSnack;
+            }
+            
+            return cardImg;
+            
+        }
+
+        function getMachineProducts(){
 
             const url ='/SmartVendingMachine/ProductsManagement/getMachineProducts';
             <% Machine currentMachine = (Machine)session.getAttribute("currentSessionMachine"); %>
             const data={machineId:<%= currentMachine.getId() %>};
             
             $.get(url,data,(response)=>{
-                             
-                response.products.forEach(product=>{
+                
+                $('#products').empty();
+                
+                response.products.forEach((product)=>{
                     
-                    products.push(product);
-
-                    let id = product.id;
-                    let tipologia = product.typology;
-                    let nome = product.name;
-                    let prezzo = product.price;
-                    let card;
-
-                    if(tipologia==='coffe'){
-
-                        card= '<div id='+id.toString()+' class="card text-center col-3 m-3" style="max-width: 540px;">'+
-                              '<div class="row g-0">'+
-                                 '<div class="col-md-4 my-5">'+
-                                   '<img src="View/img/coffee-cup.png" class="img-fluid rounded-start" alt="...">'+
-                                 '</div>'+
-                                 '<div class="col-md-8 my-4">'+
-                                   '<div class="card-body">'+
-                                     '<p class="card-text">'+'<b>'+nome+'</b>'+'</p>'+
-                                     '<p class="card-text">Prezzo: '+prezzo+'€</p>'+
-                                     '<button class="btn btn-primary">Acquista</button>'+
-                                   '</div>'+
-                                 '</div>'+
-                               '</div>'+
-                           '</div>';        
-
-                    }else if(tipologia==='water'){
-
-                         card= '<div id='+id.toString()+' class="card text-center col-3 m-3" style="max-width: 540px;">'+
+                    let cardImg = setProductImg(product.typology);
+                    let quantity = setQuantity(response.quantities,product);
+                    let quantityMessage= quantity==0 ? '<p class="badge rounded-pill text-bg-danger col-12">Non disponibile</p>' : '<p class="badge rounded-pill text-bg-success col-12">Disponibilità: '+quantity.toString()+'</p>';
+                    let purchaseBtn = quantity==0 ? '<button id="Purchase-btn" class="btn btn-primary col-12" data-bs-toggle="modal" data-bs-target="#purchaseModal" disabled>Acquista</button>' : '<button id="Purchase-btn" class="btn btn-primary col-12" data-bs-toggle="modal" data-bs-target="#purchaseModal">Acquista</button>';
+                    
+                    let card= '<div id='+product.id.toString()+' class="card text-center col-3 m-3" style="max-width: 540px;">'+
                                '<div class="row g-0">'+
-                                  '<div class="col-md-4 my-5">'+
-                                    '<img src="View/img/water.png" class="img-fluid rounded-start" alt="...">'+
-                                  '</div>'+
+                                  '<div class="col-md-4 my-5">'+cardImg+'</div>'+
                                   '<div class="col-md-8 my-4">'+
                                     '<div class="card-body">'+
-                                      '<p class="card-text">'+'<b>'+nome+'</b>'+'</p>'+
-                                      '<p class="card-text">Prezzo: '+prezzo+'€</p>'+
-                                      '<button class="btn btn-primary">Acquista</button>'+
+                                      '<p class="card-text col-12">'+'<b>'+product.name+'</b>'+'</p>'+
+                                      '<p class="card-text col-12">Prezzo: '+product.price+'€</p>'+
+                                       quantityMessage+
+                                       purchaseBtn+
                                     '</div>'+
                                   '</div>'+
                                 '</div>'+
                             '</div>';
-
-                    }else if(tipologia==='drink'){
- 
-                         card= '<div id='+id.toString()+' class="card text-center col-3 m-3" style="max-width: 540px;">'+
-                               '<div class="row g-0">'+
-                                  '<div class="col-md-4 my-5">'+
-                                    '<img src="View/img/coke.png" class="img-fluid rounded-start" alt="...">'+
-                                  '</div>'+
-                                  '<div class="col-md-8 my-4">'+
-                                    '<div class="card-body">'+
-                                      '<p class="card-text">'+'<b>'+nome+'</b>'+'</p>'+
-                                      '<p class="card-text">Prezzo: '+prezzo+'€</p>'+
-                                      '<button class="btn btn-primary">Acquista</button>'+
-                                    '</div>'+
-                                  '</div>'+
-                                '</div>'+
-                            '</div>';
-
-                    }else if(tipologia==='snack'){
-                        
-                        card= '<div id='+id.toString()+' class="card text-center col-3 m-3" style="max-width: 540px;">'+
-                               '<div class="row g-0">'+
-                                  '<div class="col-md-4 my-5">'+
-                                    '<img src="View/img/snack.png" class="img-fluid rounded-start" alt="...">'+
-                                  '</div>'+
-                                  '<div class="col-md-8 my-4">'+
-                                    '<div class="card-body">'+
-                                      '<p class="card-text">'+'<b>'+nome+'</b>'+'</p>'+
-                                      '<p class="card-text">Prezzo: '+prezzo+'€</p>'+
-                                      '<button class="btn btn-primary">Acquista</button>'+
-                                    '</div>'+
-                                  '</div>'+
-                                '</div>'+
-                            '</div>';
-
-                    }
 
                     $('#products').append(card);
+                    
+                    quantity=0;
                });
                
-               //-------Purchase
-            
-                $('.btn').click((event)=>{
-                    
-                    let card= $(event.target).parents()[3];
-                    let id=$(card).attr('id');
-                    Purchase(id);
-                });
             });
-        });
-        
-        //------Utils Functions
+ 
+        }
 
         function Purchase(id){
             
@@ -160,8 +180,9 @@
             
             $.post(url,data,(response)=>{
                 
-          
-                alert(response.message);
+                getMachineProducts();
+                
+                
  
             });
                     

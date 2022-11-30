@@ -153,31 +153,43 @@ public class MachinesManagement extends HttpServlet {
         int machineId = parseInt(request.getParameter("machineId"));
         String name = request.getParameter("name");
         String status = request.getParameter("status");
-        
+        Machine machine = machineServices.getMachine(machineId);
         boolean updated = machineServices.updateMachine(machineId, name, status);
         
-        if(updated){
+        if(machine.getActualCapacity()!=0){
+            
+            if(updated){
         
-            Jlocation.put("success", true);
-            Jlocation.put("message", "macchinetta aggiornata");
-            String location = Jlocation.toString();
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write(location);
+                Jlocation.put("success", true);
+                Jlocation.put("message", "macchinetta aggiornata");
+                String location = Jlocation.toString();
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(location);
         
-        }else{
-        
-            Jlocation.put("success", false);
-            Jlocation.put("message", "macchinetta non aggiornata");
-            String location = Jlocation.toString();
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write(location);
-        
+            }else{
+
+                Jlocation.put("success", false);
+                Jlocation.put("message", "macchinetta non aggiornata");
+                String location = Jlocation.toString();
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(location);
+
+            }
         
         }
-    
-    
+        else{
+        
+            Jlocation.put("success", false);
+            Jlocation.put("message", "la macchinetta deve prima essere ricaricata");
+            String location = Jlocation.toString();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(location);
+        
+        }
+
     }
     
     protected void deleteMachine(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, SQLException, IOException{

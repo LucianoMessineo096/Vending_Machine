@@ -42,13 +42,6 @@ public class Refill {
         this.prod4Quantity = prod4Quantity;
     }
 
-    @Override
-    public String toString() {
-        return "Refill{" + "id=" + id + ", techId=" + techId + ", machId=" + machId + ", prod1Id=" + prod1Id + ", prod1Quantity=" + prod1Quantity + ", prod2Id=" + prod2Id + ", prod2Quantity=" + prod2Quantity + ", prod3Id=" + prod3Id + ", prod3Quantity=" + prod3Quantity + ", prod4Id=" + prod4Id + ", prod4Quantity=" + prod4Quantity + '}';
-    }
-    
-    
-
     public int getId() {
         return id;
     }
