@@ -199,6 +199,21 @@
     }
         
         //------------------PURCHASE
+        
+        function checkMachinesAvailability(machines){
+        
+            var machineAvailable=0;
+                    
+            machines.forEach((machine,index)=>{
+                 
+                machine.status!=='disabled' ? machineAvailable++ : machineAvailable;
+
+
+            });
+            
+            return check = machineAvailable>0 ? true : false;
+        
+        }
 
         function showMachinesCard(){
             
@@ -210,36 +225,50 @@
             $.get(url,(response)=>{
                                 
                 if(response.success){
-                                        
-                    $('#machineConnectionBody').empty();
+                    
+                    let checkAvailability= checkMachinesAvailability(response.machines);
+                    
+                    if(checkAvailability){
+                        
+                        $('#machineConnectionBody').empty();
                    
-                    response.machines.forEach(machine=>{
-                                                
-                        if(machine.status==='active' || machine.status==='free'){
-                            
-                            let card = '<div id='+machine.id.toString()+' class="card text-center col-4 m-3" style="max-width: 540px;">'+
-                                            '<div class="row g-0">'+
-                                               '<div class="col-md-4 my-5 px-1">'+
-                                                 '<img src="/SmartVendingMachine/View/img/machine.png" class="img-fluid rounded-start" alt="...">'+
-                                               '</div>'+
-                                               '<div class="col-md-8 my-4">'+
-                                                 '<div class="card-body">'+
-                                                   '<p class="card-text">'+'<b> MACCHINETTA: '+machine.name+'</b>'+'</p>'+
-                                                   '<button id="machineConnectionBtn" class="btn btn-primary">Connettiti</button>'+
+                        response.machines.forEach(machine=>{
+
+                            if(machine.status==='active' || machine.status==='free'){
+
+                                let card = '<div id='+machine.id.toString()+' class="card text-center col-4 m-3" style="max-width: 540px;">'+
+                                                '<div class="row g-0">'+
+                                                   '<div class="col-md-4 my-5 px-1">'+
+                                                     '<img src="/SmartVendingMachine/View/img/machine.png" class="img-fluid rounded-start" alt="...">'+
+                                                   '</div>'+
+                                                   '<div class="col-md-8 my-4">'+
+                                                     '<div class="card-body">'+
+                                                       '<p class="card-text">'+'<b> MACCHINETTA: '+machine.name+'</b>'+'</p>'+
+                                                       '<button id="machineConnectionBtn" class="btn btn-primary">Connettiti</button>'+
+                                                     '</div>'+
+                                                   '</div>'+
                                                  '</div>'+
-                                               '</div>'+
-                                             '</div>'+
-                                         '</div>';
+                                             '</div>';
 
-                            $('#machineConnectionBody').append(card);
-                            
-                        }
+                                $('#machineConnectionBody').append(card);
 
-                   });
-                   
-                   $('#machineConnectionSection').css('display','block');
-                   $('.spinner-border').css('display','none');
-                } 
+                            }
+
+                       });
+
+                       $('#machineConnectionSection').css('display','block');
+                       $('.spinner-border').css('display','none');
+                    }
+                    else{
+                    
+                        $('#machineConnectionBody').empty();
+                        $('#machineConnectionBody').append('<div class="alert alert-warning m-3" role="alert">Nessuna macchinetta al momento disponibile!</div>');
+                        $('#machineConnectionSection').css('display','block');
+                        $('.spinner-border').css('display','none');
+                    }
+ 
+                }
+                
             });
            
         }
