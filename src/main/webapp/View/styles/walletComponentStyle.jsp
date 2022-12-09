@@ -17,7 +17,7 @@
     #wallet-info{
         
         color:white;
-        background:#3F4E4F;
+        background:#084c61;
         border-radius: 10px 0px 0px 10px;
         padding:40px;
     }
@@ -69,6 +69,12 @@
         color: white;
 
 
+    }
+    
+    #wallet-info img{
+        
+        width:50px;
+        heigth:50px;
     }
 
 </style>

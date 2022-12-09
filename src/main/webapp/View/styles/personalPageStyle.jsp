@@ -91,6 +91,11 @@
         display:none;
     }
     
+    button:disabled {
+        cursor: not-allowed;
+        pointer-events: all !important;
+    }
+    
     /*-------------------TABLES----------------------------------------------*/
     
     tbody {

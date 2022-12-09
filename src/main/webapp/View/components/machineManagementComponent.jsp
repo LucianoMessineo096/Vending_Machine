@@ -39,7 +39,7 @@
                 <div class="row">
                    <div class="mb-3 col-6">
                        <label for="InputName" class="form-label">ID PRODOTTO 1</label>
-                       <input type="number" class="form-control" onblur="checkProdId(this)" id="productId1-field" aria-describedby="productId1Help" >
+                       <input type="number" min="1" class="form-control" onblur="checkProdId(this)" id="productId1-field" aria-describedby="productId1Help" >
                    </div>
                    <div class="mb-3 col-6">
                      <label for="InputName" class="form-label">QUANTITA PRODOTTO 1</label>
@@ -49,7 +49,7 @@
                 <div class="row">
                     <div class="mb-3 col-6">
                         <label for="InputName" class="form-label">ID PRODOTTO 2</label>
-                        <input type="number" class="form-control" onblur="checkProdId(this)" id="productId2-field" aria-describedby="productId2Help" >
+                        <input type="number" min="1" class="form-control" onblur="checkProdId(this)" id="productId2-field" aria-describedby="productId2Help" >
                     </div>
                     <div class="mb-3 col-6">
                       <label for="InputName" class="form-label">QUANTITA PRODOTTO 2</label>
@@ -59,7 +59,7 @@
                 <div class="row">
                     <div class="mb-3 col-6">
                         <label for="InputName" class="form-label">ID PRODOTTO 3</label>
-                        <input type="number" class="form-control" onblur="checkProdId(this)" id="productId3-field" aria-describedby="productId3Help" >
+                        <input type="number" min="1" class="form-control" onblur="checkProdId(this)" id="productId3-field" aria-describedby="productId3Help" >
                     </div>
                     <div class="mb-3 col-6">
                         <label for="InputName" class="form-label">QUANTITA PRODOTTO 3</label>
@@ -69,7 +69,7 @@
                 <div class="row">
                     <div class="mb-3 col-6">
                         <label for="InputName" class="form-label">ID PRODOTTO 4</label>
-                        <input type="number" class="form-control" onblur="checkProdId(this)" id="productId4-field" aria-describedby="productId4Help" >
+                        <input type="number" min="1" class="form-control" onblur="checkProdId(this)" id="productId4-field" aria-describedby="productId4Help" >
                     </div>
                     <div class="mb-3 col-6">
                         <label for="InputName" class="form-label">QUANTITA PRODOTTO 4</label>
@@ -168,7 +168,20 @@
         
         $('#updateMachineTitle .badge').remove(); 
         
-    }) 
+    });
+    
+    $('#addRefillModal').on('hidden.bs.modal', function () {
+        
+        $('#productId1-field').removeClass('is-invalid');
+        $('#product1quantity-field').removeClass('is-invalid');
+        $('#productId2-field').removeClass('is-invalid');
+        $('#product2quantity-field').removeClass('is-invalid');
+        $('#productId3-field').removeClass('is-invalid');
+        $('#product3quantity-field').removeClass('is-invalid');
+        $('#productId4-field').removeClass('is-invalid');
+        $('#product4quantity-field').removeClass('is-invalid');
+        
+    });
     
     //-------------------------------------------------------------------------
     
@@ -208,6 +221,8 @@
             validation=false;
         }
         
+        prod1Quantity>=1 && prod1Quantity<=5 ? validation=true : vaidation=false;
+        
         if(prod2Id===''){
 
             $("#productId2-field").addClass('is-invalid');
@@ -221,6 +236,8 @@
 
             validation=false;
         }
+        
+        prod2Quantity>=1 && prod2Quantity<=5 ? validation=true : vaidation=false;
         
         if(prod3Id===''){
 
@@ -236,6 +253,8 @@
             validation=false;
         }
         
+        prod3Quantity>=1 && prod3Quantity<=5 ? validation=true : vaidation=false;
+        
         if(prod4Id===''){
 
             $("#productId4-field").addClass('is-invalid');
@@ -250,7 +269,8 @@
             validation=false;
         }
         
-
+        prod4Quantity>=1 && prod4Quantity<=5 ? validation=true : vaidation=false;
+        
         return validation;
     }
     
@@ -307,7 +327,6 @@
 
             $.post(url,data,(response)=>{
 
-
                 if(response.success===true){
 
                     showAllMachines();
@@ -332,8 +351,9 @@
                 $('#machine-mngmt tbody').empty();
 
                 response.machines.forEach(machine=>{
-                    
+
                     let message= machine.actualCapacity==0 ? '<span class="badge rounded-pill text-bg-danger">Da rifornire</span>' : "";
+
                     let updateBtnEnabled = '<button id="updateMachineBtn" type="button" class="btn btn-outline-success mx-1" data-bs-toggle="modal" data-bs-target="#updateMachineModal">'+
                                                 '<i class="bi bi-pencil"></i>'+
                                             '</button>';
@@ -480,14 +500,8 @@
     function addMachine(){
 
         const name = $('#addMachineModal .modal-body #name-field').val();
-
         const url='/SmartVendingMachine/MachinesManagement/addMachine';
-
-        const data={
-
-            name:name
-
-        };
+        const data={name:name};
         
         $.post(url,data,(response)=>{
 
@@ -508,8 +522,9 @@
         let quantity = $(domElmnt).val();
 
         if(quantity<1 || quantity>5){
-
-            $(domElmnt).val(1);
+            
+            
+            $(domElmnt).val('');
 
         }
 
@@ -539,7 +554,7 @@
         let productId = $(domElm).val();
         
         if(productId!==''){
-            
+
             if(!prodIdIsRepeated(productId)){
 
                 if(productId!==''){
@@ -553,7 +568,7 @@
 
                             alert('il prodotto: '+productId+' non esiste!');
 
-                            $(domElmnt).val('');
+                            $(domElm).val('');
                         }
                     });
 
@@ -563,11 +578,10 @@
             else{
 
                 alert('il prodotto '+productId+' non puo essere inserito piu di una volta');
-
+                $(domElm).val('');
             }
-            
-        }
 
+        }  
     }
     
 </script>

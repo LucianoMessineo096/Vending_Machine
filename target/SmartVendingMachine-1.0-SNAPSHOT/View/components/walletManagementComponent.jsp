@@ -18,11 +18,18 @@
     <%  User currentUser = (User)session.getAttribute("currentSessionUser"); %>
                      
     <div id="wallet-card" class="row p-1 m-2">
-        <div class="col-4" id="wallet-info">
-            <p>MY WALLET</p>
-            <p id="wallet-userName" class="m-1"><b>NOME:</b> <%=currentUser.getName().toUpperCase() %></p>
-            <p id="wallet-userSurname" class="m-1"><b>COGNOME:</b> <%=currentUser.getSurname().toUpperCase() %></p>
-            <p class="m-1">SALDO: €<b id="walletBalance"></b></p>    
+        <div class="col-4 d-flex flex-column justify-content-between" id="wallet-info">
+            <div class="d-flex flex-row">
+                <img src="/SmartVendingMachine/View/img/credit-card.png"/>
+                <p class="py-3 m-0">MY WALLET</p>  
+            </div>
+            <div>
+                <p id="wallet-userName" class="m-1"><b>NOME:</b> <%=currentUser.getName().toUpperCase() %></p>
+                <p id="wallet-userSurname" class="m-1"><b>COGNOME:</b> <%=currentUser.getSurname().toUpperCase() %></p>
+            </div>
+            <div>
+                <p class="m-1">SALDO: €<b id="walletBalance"></b></p> 
+            </div>
         </div>
         <div class="col-8">
             <div class="d-flex flex-row justify-content-between col-11">

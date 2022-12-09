@@ -29,17 +29,14 @@
         
     </head>
     <body>
-        <jsp:include page="/View/components/navbar2.jsp"></jsp:include>
-        
-        <section id="mainSection" class="row">
-            
-            <div id="sideNav" class="col-2">
-                
-                <div class="d-flex flex-column"></div>
-                
-            </div>
 
-            <div class="col-10">
+        <section id="mainSection" class="row">
+
+            <div class='col-1'>
+                <jsp:include page="/View/components/sideNavComponent.jsp"></jsp:include>
+            </div>
+            
+            <div class="col-11">
                 
                 <%  User currentUser = (User)session.getAttribute("currentSessionUser"); %>
                 <div id="subTitle" class="d-flex flex-row justify-content-between">
@@ -78,44 +75,35 @@
             
             //-------------------Users management----------------------------//
             
-            if('<%= currentUser.getType() %>' === 'admin'){
-                                
-                showAdminInterface();
-                
-            }
+            '<%= currentUser.getType() %>' === 'admin' ? showAdminInterface() : '';
             
-            if('<%= currentUser.getType() %>' === 'user'){
-                
-                showUserInterface();
-                
-            }
+            '<%= currentUser.getType() %>' === 'user' ? showUserInterface() : '';
             
-            if('<%= currentUser.getType() %>' === 'tech'){
-                
-                showTechInterface();
-                
-            }
+            '<%= currentUser.getType() %>' === 'tech' ? showTechInterface() : '';
 
             //---------PERSONAL INFO VIEW -----------//
 
-            $("#personalData").click(()=>{
-
+            $("#personalData").click((e)=>{
+                
+                e.preventDefault();
                 showPersonalInfo();
 
             });
 
             //--------WALLET VIEW --------//
 
-            $('#wallet').click(()=>{
-            
+            $('#wallet').click((e)=>{
+                
+                e.preventDefault();
                 showWallet();
 
             });
 
             //--------Purchase-----------//
 
-            $('#purchase').click(()=>{
+            $('#purchase').click((e)=>{
                 
+                e.preventDefault();
                 showMachinesCard();
                 
             });
@@ -137,16 +125,18 @@
             
             //---------Purchase History ----------//
 
-            $('#purchasesMade').click(()=>{
-            
+            $('#purchasesMade').click((e)=>{
+                
+                e.preventDefault();
                 showPurchases();
 
             });
             
             //-------------------Users Management(admin)---------------------//
             
-            $('#usersManagement').click(()=>{
+            $('#usersManagement').click((e)=>{
                 
+                e.preventDefault();
                 showAllUsers();
                 
             });
@@ -158,8 +148,9 @@
             
             //-------------------Products Management(admin/tech)------------------//
             
-            $('#productsManagement').click(()=>{
+            $('#productsManagement').click((e)=>{
                 
+                e.preventDefault();
                 showAllProducts();
                 
             });
@@ -167,7 +158,8 @@
             //------------------Machine Management(admin)------------------------//
         
             $('body').on('click','#machinesManagement',(e)=>{
-
+                
+                e.preventDefault();
                 showAllMachines();
 
             });
@@ -180,23 +172,19 @@
         
         function showPersonalInfo(){
 
-        clearInterface();
+            clearInterface();
 
-        const data={
+            const data={userId:<%= currentUser.getId()%>};
 
-            userId:<%= currentUser.getId()%>
+            $.get('/SmartVendingMachine/UsersManagement/getUser',data,(response)=>{
 
-        };
+                if(response.success){
 
-        $.get('/SmartVendingMachine/UsersManagement/getUser',data,(response)=>{
+                    $('#personal-data').css('display','block');
 
-            if(response.success){
-
-                $('#personal-data').css('display','block');
-
-            }
-        });
-    }
+                }
+            });
+        }
         
         //------------------PURCHASE
         
@@ -206,7 +194,7 @@
                     
             machines.forEach((machine,index)=>{
                  
-                machine.status!=='disabled' ? machineAvailable++ : machineAvailable;
+                (machine.status!=='disabled' && machine.status!=='occupied') ? machineAvailable++ : machineAvailable;
 
 
             });
@@ -227,7 +215,7 @@
                 if(response.success){
                     
                     let checkAvailability= checkMachinesAvailability(response.machines);
-                    
+                                        
                     if(checkAvailability){
                         
                         $('#machineConnectionBody').empty();
@@ -276,98 +264,36 @@
         //---------------UTILS
         
         function showAdminInterface(){
-        
-            $('#sideNav div').empty();
-        
-            let buttons = '<button type="button" id="personalData" class="btn btn-sm col-12 my-3 d-flex flex-row">'+
-                                '<img class="col-2 p-0 py-1 m-0 my-1" src="/SmartVendingMachine/View/img/wallet.png">'+
-                                '<p class="col-10 p-0 m-0 my-1 ">DATI PERSONALI</p>'+
-                            '</button>'+
-                            '<button type="button" id="wallet" class="btn btn-sm col-12 my-3 d-flex flex-row">'+
-                                '<img class="col-2 p-0 m-0 my-1" src="/SmartVendingMachine/View/img/wallet.png">'+ 
-                                '<p class="col-10 p-0 m-0 my-1">WALLET</p>'+
-                            '</button>'+
-                            '<button type="button" id="purchase" class="btn btn-sm col-12 my-3 d-flex flex-row">'+
-                                '<img class="col-2 p-0 py-1 m-0 my-1" src="/SmartVendingMachine/View/img/shopping-cart.png">'+ 
-                                '<p class="col-10 p-0 m-0 my-1">ACQUISTO</p>'+
-                            '</button>'+
-                            '<button type="button" id="purchasesMade" class="btn btn-sm col-12 my-3 d-flex flex-row">'+
-                                '<img class="col-2 p-0 py-1 m-0 my-1" src="/SmartVendingMachine/View/img/choices.png">'+ 
-                                '<p class="col-10 p-0 m-0 my-1">ACQUISTI EFFETTUATI</p>'+
-                            '</button>'+
-                            '<button type="button" id="usersManagement" class="btn btn-sm col-12 my-3 d-flex flex-row">'+
-                                '<img class="col-2 p-0 py-1 m-0 my-1" src="/SmartVendingMachine/View/img/profile.png">'+
-                                '<p class="col-10 p-0 m-0 my-1">GESTIONE UTENTI</p>'+
-                            '</button>'+
-                            '<button type="button" id="machinesManagement" class="btn btn-sm col-12 my-3 d-flex flex-row">'+
-                                '<img class="col-2 p-0 py-1 m-0 my-1"src="/SmartVendingMachine/View/img/favicon-16x16.png">'+ 
-                                '<p class="col-10 p-0 m-0 my-1">GESTIONE MACCHINETTE</p>'+
-                            '</button>'+
-                            '<button type="button" id="productsManagement" class="btn btn-sm col-12 my-3 d-flex flex-row">'+
-                                '<img class="col-2 p-0 py-1 m-0 my-1" src="/SmartVendingMachine/View/img/boxes.png">'+ 
-                                '<p class="col-10 p-0 m-0 my-1">GESTIONE PRODOTTI</p>'+
-                            '</button>';
-        
-            $('#sideNav div').append(buttons);
-
-        }
-        
-        function showUserInterface(){
             
-            $('#sideNav div').empty();
-        
-            let buttons = '<button type="button" id="personalData" class="btn btn-sm col-12 my-3 d-flex flex-row">'+
-                                '<img class="col-2 p-0 py-1 m-0 my-1" src="/SmartVendingMachine/View/img/wallet.png">'+
-                                '<p class="col-10 p-0 m-0 my-1 ">DATI PERSONALI</p>'+
-                            '</button>'+
-                            '<button type="button" id="wallet" class="btn btn-sm col-12 my-3 d-flex flex-row">'+
-                                '<img class="col-2 p-0 m-0 my-1" src="/SmartVendingMachine/View/img/wallet.png">'+ 
-                                '<p class="col-10 p-0 m-0 my-1">WALLET</p>'+
-                            '</button>'+
-                            '<button type="button" id="purchase" class="btn btn-sm col-12 my-3 d-flex flex-row">'+
-                                '<img class="col-2 p-0 py-1 m-0 my-1" src="/SmartVendingMachine/View/img/shopping-cart.png">'+ 
-                                '<p class="col-10 p-0 m-0 my-1">ACQUISTO</p>'+
-                            '</button>'+
-                            '<button type="button" id="purchasesMade" class="btn btn-sm col-12 my-3 d-flex flex-row">'+
-                                '<img class="col-2 p-0 py-1 m-0 my-1" src="/SmartVendingMachine/View/img/choices.png">'+ 
-                                '<p class="col-10 p-0 m-0 my-1">ACQUISTI EFFETTUATI</p>'+
-                            '</button>';
-                            
-            $('#sideNav div').append(buttons);
-
+            $('#personalData').show();
+            $('#wallet').show();
+            $('#purchase').show();
+            $('#purchasesMade').show();
+            $('#usersManagement').show();
+            $('#machinesManagement').show();
+            $('#productsManagement').show();
         }
         
         function showTechInterface(){
             
-            $('#sideNav div').empty();
+            $('#personalData').show();
+            $('#wallet').show();
+            $('#purchase').show();
+            $('#purchasesMade').show();
+            $('#usersManagement').hide();
+            $('#machinesManagement').show();
+            $('#productsManagement').show();
+        }
         
-            let buttons = '<button type="button" id="personalData" class="btn btn-sm col-12 my-3 d-flex flex-row">'+
-                                '<img class="col-2 p-0 py-1 m-0 my-1" src="/SmartVendingMachine/View/img/wallet.png">'+
-                                '<p class="col-10 p-0 m-0 my-1 ">DATI PERSONALI</p>'+
-                            '</button>'+
-                            '<button type="button" id="wallet" class="btn btn-sm col-12 my-3 d-flex flex-row">'+
-                                '<img class="col-2 p-0 m-0 my-1" src="/SmartVendingMachine/View/img/wallet.png">'+ 
-                                '<p class="col-10 p-0 m-0 my-1">WALLET</p>'+
-                            '</button>'+
-                            '<button type="button" id="purchase" class="btn btn-sm col-12 my-3 d-flex flex-row">'+
-                                '<img class="col-2 p-0 py-1 m-0 my-1" src="/SmartVendingMachine/View/img/shopping-cart.png">'+ 
-                                '<p class="col-10 p-0 m-0 my-1">ACQUISTO</p>'+
-                            '</button>'+
-                            '<button type="button" id="purchasesMade" class="btn btn-sm col-12 my-3 d-flex flex-row">'+
-                                '<img class="col-2 p-0 py-1 m-0 my-1" src="/SmartVendingMachine/View/img/choices.png">'+ 
-                                '<p class="col-10 p-0 m-0 my-1">ACQUISTI EFFETTUATI</p>'+
-                            '</button>'+
-                            '<button type="button" id="machinesManagement" class="btn btn-sm col-12 my-3 d-flex flex-row">'+
-                                '<img class="col-2 p-0 py-1 m-0 my-1"src="/SmartVendingMachine/View/img/favicon-16x16.png">'+ 
-                                '<p class="col-10 p-0 m-0 my-1">GESTIONE MACCHINETTE</p>'+
-                            '</button>'+
-                            '<button type="button" id="productsManagement" class="btn btn-sm col-12 my-3 d-flex flex-row">'+
-                                '<img class="col-2 p-0 py-1 m-0 my-1" src="/SmartVendingMachine/View/img/boxes.png">'+ 
-                                '<p class="col-10 p-0 m-0 my-1">GESTIONE PRODOTTI</p>'+
-                            '</button>';
-        
-            $('#sideNav div').append(buttons);
-
+        function showUserInterface(){
+            
+            $('#personalData').show();
+            $('#wallet').show();
+            $('#purchase').show();
+            $('#purchasesMade').show();
+            $('#usersManagement').hide();
+            $('#machinesManagement').hide();
+            $('#productsManagement').hide();
         }
         
         function clearInterface(){

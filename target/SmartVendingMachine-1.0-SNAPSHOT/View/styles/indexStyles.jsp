@@ -9,21 +9,24 @@
 <style>
             
     body{
-
-        heigth:100%;
-        background-image: url("https://en.pimg.jp/068/714/653/1/68714653.jpg");
-
+        height: 100vh;
+        margin: 0px;
+        
+        background-image: url("/SmartVendingMachine/View/img/coffeImg.webp");
+        background-position: center;
+        background-repeat: repeat;
+        background-size: 50% auto;
+        
     }
-
+ 
     .card{
 
         box-shadow: 5px,10px;
-
     }
 
     .card-body{
 
-        background-color: tan;
+        background: rgb(193,154,107);
         border-radius: 5px;
     }
 
@@ -32,6 +35,7 @@
         color:white;
 
     }
+ 
 
     #main-section{
 
@@ -43,7 +47,7 @@
     .card{
 
         margin-top: 100px;
-
+            
     }
 
     .card-title{

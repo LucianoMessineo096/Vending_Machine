@@ -20,6 +20,11 @@
         margin:10px;
     }
     
+    button:disabled {
+        cursor: not-allowed;
+        pointer-events: all !important;
+    }
+    
     
     
     

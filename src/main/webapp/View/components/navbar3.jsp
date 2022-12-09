@@ -9,7 +9,7 @@
 <!DOCTYPE html>
 <style>
     .navbar{
-        border-bottom: groove;
+        
         margin: 0px;
         padding: 0px;
     }
@@ -21,7 +21,7 @@
     .container-fluid{
 
         /*background-color: #3F4E4F;*/
-        background-color: #084c61;
+        background-color: rgb(50 50 50);
         margin:0px;
         padding:0px;
     }

@@ -38,7 +38,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
-                <h1 class="modal-title fs-5" id="updateMachineTitle">Acquisto Effettuato</h1>
+                <h1 class="modal-title fs-5" id="purchaseModalMessage"></h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
             </div>
@@ -139,16 +139,16 @@
                     
                     let cardImg = setProductImg(product.typology);
                     let quantity = setQuantity(response.quantities,product);
-                    let quantityMessage= quantity==0 ? '<p class="badge rounded-pill text-bg-danger col-12">Non disponibile</p>' : '<p class="badge rounded-pill text-bg-success col-12">Disponibilità: '+quantity.toString()+'</p>';
+                    let quantityMessage= quantity==0 ? '<p class="badge rounded-pill text-bg-danger col-8">Non disponibile</p>' : '<p class="badge rounded-pill text-bg-success col-8">Disponibilità: '+quantity.toString()+'</p>';
                     let purchaseBtn = quantity==0 ? '<button id="Purchase-btn" class="btn btn-primary col-12" data-bs-toggle="modal" data-bs-target="#purchaseModal" disabled>Acquista</button>' : '<button id="Purchase-btn" class="btn btn-primary col-12" data-bs-toggle="modal" data-bs-target="#purchaseModal">Acquista</button>';
                     
-                    let card= '<div id='+product.id.toString()+' class="card text-center col-3 m-3" style="max-width: 540px;">'+
+                    let card= '<div id='+product.id.toString()+' class="card text-center col-5 m-3" style="max-width: 540px;">'+
                                '<div class="row g-0">'+
                                   '<div class="col-md-4 my-5">'+cardImg+'</div>'+
                                   '<div class="col-md-8 my-4">'+
                                     '<div class="card-body">'+
                                       '<p class="card-text col-12">'+'<b>'+product.name+'</b>'+'</p>'+
-                                      '<p class="card-text col-12">Prezzo: '+product.price+'€</p>'+
+                                      '<p class="card-text col-12">Prezzo: € '+product.price+'</p>'+
                                        quantityMessage+
                                        purchaseBtn+
                                     '</div>'+
@@ -179,6 +179,10 @@
             const url='/SmartVendingMachine/PurchasesManagement/doPurchase';
             
             $.post(url,data,(response)=>{
+                
+                $('#purchaseModalMessage').text(response.message)
+                
+                console.log(response);
                 
                 getMachineProducts();
                 
