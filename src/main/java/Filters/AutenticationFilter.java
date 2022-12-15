@@ -106,8 +106,6 @@ public class AutenticationFilter implements Filter {
         HttpSession session = req.getSession(false);
         String uri = req.getRequestURI();
         
-        System.out.println(session +"____"+uri);
-
         if(session == null || (session.getAttribute("currentSessionUser") == null)) {
             if(uri.endsWith("registration") || uri.endsWith("login")){
                 res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.

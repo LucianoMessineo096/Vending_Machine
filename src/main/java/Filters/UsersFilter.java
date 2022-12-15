@@ -114,11 +114,13 @@ public class UsersFilter implements Filter {
                uri.endsWith("updatePersonalData") ||uri.endsWith("getAllUsers") ||
                uri.endsWith("getWallet") || uri.endsWith("getRecharges") || uri.endsWith("updateBalance")) {
                 
-                    res.sendRedirect("../index.jsp");
+                
+                
+                    res.sendRedirect("/SmartVendingMachine/index.jsp");
                     
             } else {
                 
-                    res.sendRedirect("../index.jsp");
+                    res.sendRedirect("/SmartVendingMachine/index.jsp");
                     
             }
         } else {

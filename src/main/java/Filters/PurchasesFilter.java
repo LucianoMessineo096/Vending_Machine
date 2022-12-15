@@ -120,11 +120,11 @@ public class PurchasesFilter implements Filter {
             if(session == null || session.getAttribute("currentSessionUser") == null || session.getAttribute("currentSessionMachine")==null) {
                 if(uri.endsWith("doPurchase")) {
 
-                        res.sendRedirect("../index.jsp");
+                        res.sendRedirect("/SmartVendingMachine/index.jsp");
 
                 } else {
 
-                        res.sendRedirect("../index.jsp");
+                        res.sendRedirect("/SmartVendingMachine/index.jsp");
 
                 }
             } else {
