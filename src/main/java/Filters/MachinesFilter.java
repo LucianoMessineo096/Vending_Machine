@@ -111,7 +111,7 @@ public class MachinesFilter implements Filter {
         
             if(uri.endsWith("getAll") || uri.endsWith("getMachine") || uri.endsWith("updateMachine") ||
                     uri.endsWith("deleteMachine") || uri.endsWith("addMachine") || uri.endsWith("release") ||
-                    uri.endsWith("connect")){
+                    uri.endsWith("connect") || uri.endsWith("MachinesManagement")){
                 
                 res.sendRedirect("/SmartVendingMachine/index.jsp");
         

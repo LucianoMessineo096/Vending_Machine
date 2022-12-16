@@ -113,10 +113,12 @@ public class AutenticationFilter implements Filter {
                 res.setDateHeader("Expires", 0);
                 chain.doFilter(request, response);
             }
-            
+
         } else {
             res.sendRedirect("/UsersManagement/personalPage");
         }
+        
+        
     }
 
     /**
