@@ -423,12 +423,6 @@ public class UsersManagement extends HttpServlet {
                 request.getRequestDispatcher("index.jsp").forward(request, response);
                 break;
             
-            case "/SmartVendingMachine/UsersManagement/registration":
-                
-                request.getRequestDispatcher("/View/registrationPage.jsp").forward(request, response);
-                
-                break;
-            
             case "/SmartVendingMachine/UsersManagement/personalPage":
                 
                 try{
@@ -514,7 +508,7 @@ public class UsersManagement extends HttpServlet {
             }
                 
                 break;
-
+              
         }
     }
     
