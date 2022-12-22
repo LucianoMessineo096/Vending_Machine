@@ -1,0 +1,39 @@
+#TOMCAT
+
+La versione utilizzata e' la 9.0.65
+username: admin
+pass: admin
+
+#MYSQL
+
+username: root
+password: root
+
+-----------------------------------------------------
+Nella repository e' presente il file smartvendingmachinedb.sql; effettuare il run su mysql del codice cosi da creare la struttura 
+del db.
+
+saranno presenti due utenze:
+
+ADMIN
+
+username: admin@svm.com
+password: Admin001!
+
+TECNICO
+
+username: tech@svm.com
+password: Tech001!
+
+#FILE WAR
+
+il file .war si trova all'interno della cartella target. 
+
+Per il deploy basta raggiungere localhost:8080/manager dal browser , e una volta autenticati con le credenziali sopra riportate, nella sezione WAR file to deploy
+basta indicare il file .war
+
+--------------------------------------------------
+#PRIMO UTILIZZO
+
+si prega di accedere con l'utenza da amministratore per una visione piu completa di tutte le componenti del progetto
+si prega di effettuare il rifornimento 
