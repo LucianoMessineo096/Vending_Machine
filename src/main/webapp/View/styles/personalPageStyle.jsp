@@ -149,6 +149,12 @@
 
     }
     
+    #machineConnectionBody{
+        
+        max-height: 600px;
+        overflow-y: scroll;
+    }
+     
     /*-----------------SIDENAV BTNS---------------------------------------*/
     #sideNav button{
         

@@ -8,6 +8,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <div id="Users">
+    
+    <div id="actions" class="d-flex flex-row m-0 p-0 justify-content-between">
+        <p></p>
+    </div>
 
     <table class="table table-striped">
        <thead>
@@ -59,7 +63,7 @@
         
         $('.modal-title .badge').remove(); 
         
-    }) 
+    });
     
     //-------------------------------------------------------------------------
     
@@ -71,10 +75,14 @@
         const url='/SmartVendingMachine/UsersManagement/getAllUsers';
 
         $.get(url,(response)=>{
+            
+            let numUsers=0;
 
             $('#Users table tbody').empty();
 
             response.users.forEach(user=>{
+                
+                numUsers++;
                 
                 <% User currentUser = (User) session.getAttribute("currentSessionUser"); %>
                 
@@ -101,7 +109,10 @@
                 
 
             });
-
+            
+            $('#Users #actions .badge').remove();
+            let infoBadge='<span class="badge rounded-pill text-bg-info my-4 mx-2">Utenti totali: '+numUsers+'</span>';
+            $('#Users #actions').append(infoBadge);
             $('#Users').css('display','block');
             $('.spinner-border').css('display','none');
         });

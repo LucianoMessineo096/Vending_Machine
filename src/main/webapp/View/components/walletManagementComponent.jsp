@@ -58,11 +58,7 @@
           <button id="recharge-button" class="btn btn-success my-2">Ricarica</button>
       </div>
     </div>
-                    
-                    
-    <!-- *****************************************test*********************************************** -->
-    
-    
+
 </div>
 <script>
     
@@ -72,30 +68,13 @@
 
     });
     
-    function isFloat(rechargeValue){
-        
-        rechargeValue=rechargeValue.toString();
-        
-        if(rechargeValue.includes('.') || rechargeValue.includes(',')){
-            
-            return false;
-        }
-        else{
-            
-            return true;
-        }
-        
-    }
-    
     function _validation(){
         
         $(".offcanvas .offcanvas-body #recharge-value").removeClass('is-invalid');
                 
         let validation=true;
         
-        let rechargeValue = parseInt($('.offcanvas .offcanvas-body #recharge-value').val());
-        
-        console.log(typeof rechargeValue +"_"+ rechargeValue)
+        let rechargeValue = $('.offcanvas .offcanvas-body #recharge-value').val();
         
         if(rechargeValue<0 || rechargeValue>100){
             
@@ -105,13 +84,6 @@
              
         }
         
-        /*if(isFloat(rechargeValue)){
-           
-           alert('il valore della ricarica deve essere intero');
-           $(".offcanvas .offcanvas-body #recharge-value").addClass('is-invalid');
-           validation=false;
-            
-        }*/
         
         if(rechargeValue=== undefined || rechargeValue===null || rechargeValue===''){
             
@@ -127,7 +99,7 @@
     function doWalletRecharge(){
 
         let rechargeValue = $('.offcanvas .offcanvas-body #recharge-value').val();
-        
+
         let validation = _validation();
         
         if(validation){
@@ -138,7 +110,7 @@
             const data = {
 
                 userId: parseInt('<%= currentUser.getId() %>'),
-                rechargeValue: parseInt(rechargeValue)
+                rechargeValue: rechargeValue
             };
 
             $.post(url,data,(response)=>{

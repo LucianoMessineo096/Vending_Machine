@@ -7,7 +7,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <div id="Products">
-    <button type="button" class="btn btn-success my-3" data-bs-toggle="modal" data-bs-target="#addProductModal">Inserisci Prodotto</button>
+    <div id="actions" class="d-flex flex-row m-0 p-0 justify-content-between">
+        <button type="button" class="btn btn-success my-3" data-bs-toggle="modal" data-bs-target="#addProductModal">Inserisci Prodotto</button>
+    </div>
     <table class="table table-striped">
        <thead>
          <tr>
@@ -118,31 +120,36 @@
         $.get(url,(response)=>{
 
             if(response.success){
+                
+                let numProducts=0;
 
                 $('#Products tbody').empty();
 
                 response.products.forEach(product=>{
+                    
+                    numProducts++;
+                    
+                    let record = '<tr id='+product.id.toString()+'>'+'<td>'+product.id.toString()+'</td>'+
+                                        '<td>'+product.name.toString()+'</td>'+
+                                        '<td>€'+product.price.toString()+'</td>'+
+                                        '<td>'+product.typology.toString()+'</td>'+
+                                        '<td>'+
+                                            '<button id="updateProductBtn" type="button" class="btn btn-outline-success mx-1" data-bs-toggle="modal" data-bs-target="#updateProductModal">'+
+                                                '<i class="bi bi-pencil"></i>'+
+                                            '</button>'+
+                                            '<button id="deleteProductBtn" type="button" onclick="deleteProduct" class="btn btn-outline-danger mx-1">'+
+                                                '<i class="bi bi-trash3-fill"></i>'+
+                                            '</button>'+
+                                        '</td>'+
+                                 '</tr>';
 
-                console.log(product)
-
-                let record = '<tr id='+product.id.toString()+'>'+'<td>'+product.id.toString()+'</td>'+
-                                    '<td>'+product.name.toString()+'</td>'+
-                                    '<td>€'+product.price.toString()+'</td>'+
-                                    '<td>'+product.typology.toString()+'</td>'+
-                                    '<td>'+
-                                        '<button id="updateProductBtn" type="button" class="btn btn-outline-success mx-1" data-bs-toggle="modal" data-bs-target="#updateProductModal">'+
-                                            '<i class="bi bi-pencil"></i>'+
-                                        '</button>'+
-                                        '<button id="deleteProductBtn" type="button" onclick="deleteProduct" class="btn btn-outline-danger mx-1">'+
-                                            '<i class="bi bi-trash3-fill"></i>'+
-                                        '</button>'+
-                                    '</td>'+
-                             '</tr>';
-
-                $('#Products tbody').append(record);
+                    $('#Products tbody').append(record);
 
                 });
-
+                
+                $('#Products #actions .badge').remove();
+                let infoBadge='<span class="badge rounded-pill text-bg-info my-4 mx-2">Prodotti totali: '+numProducts+'</span>';
+                $('#Products #actions').append(infoBadge);
                 $('#Products').css('display','block');
                 $('.spinner-border').css('display','none');
             }

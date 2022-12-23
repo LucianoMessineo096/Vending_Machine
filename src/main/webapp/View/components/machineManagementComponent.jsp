@@ -9,7 +9,11 @@
 <!DOCTYPE html>
 <div id="machine-mngmt">
     
-    <button type="button" class="btn btn-success my-3"data-bs-toggle="modal" data-bs-target="#addMachineModal">Inserisci Macchinetta</button>
+    <div id="actions" class="d-flex flex-row m-0 p-0 justify-content-between">
+        <button type="button" class="btn btn-success my-3"data-bs-toggle="modal" data-bs-target="#addMachineModal">Inserisci Macchinetta</button>
+        
+    </div>
+    
     <table class="table table-striped">
        <thead>
          <tr>
@@ -39,7 +43,9 @@
                 <div class="row">
                    <div class="mb-3 col-6">
                        <label for="InputName" class="form-label">ID PRODOTTO 1</label>
-                       <input type="number" min="1" class="form-control" onblur="checkProdId(this)" id="productId1-field" aria-describedby="productId1Help" >
+                       <select class="form-select" id="dropdown-id-list1" aria-label="Default select example" onblur="checkIfprodIdIsRepeated(this)">
+                        <option value="0">Open this select menu</option>
+                       </select>
                    </div>
                    <div class="mb-3 col-6">
                      <label for="InputName" class="form-label">QUANTITA PRODOTTO 1</label>
@@ -49,7 +55,9 @@
                 <div class="row">
                     <div class="mb-3 col-6">
                         <label for="InputName" class="form-label">ID PRODOTTO 2</label>
-                        <input type="number" min="1" class="form-control" onblur="checkProdId(this)" id="productId2-field" aria-describedby="productId2Help" >
+                        <select class="form-select" id="dropdown-id-list2" aria-label="Default select example" onblur="checkIfprodIdIsRepeated(this)">
+                        <option value="0">Open this select menu</option>
+                       </select>
                     </div>
                     <div class="mb-3 col-6">
                       <label for="InputName" class="form-label">QUANTITA PRODOTTO 2</label>
@@ -59,7 +67,9 @@
                 <div class="row">
                     <div class="mb-3 col-6">
                         <label for="InputName" class="form-label">ID PRODOTTO 3</label>
-                        <input type="number" min="1" class="form-control" onblur="checkProdId(this)" id="productId3-field" aria-describedby="productId3Help" >
+                        <select class="form-select" id="dropdown-id-list3" aria-label="Default select example" onblur="checkIfprodIdIsRepeated(this)">
+                        <option value="0">Open this select menu</option>
+                       </select>
                     </div>
                     <div class="mb-3 col-6">
                         <label for="InputName" class="form-label">QUANTITA PRODOTTO 3</label>
@@ -69,7 +79,9 @@
                 <div class="row">
                     <div class="mb-3 col-6">
                         <label for="InputName" class="form-label">ID PRODOTTO 4</label>
-                        <input type="number" min="1" class="form-control" onblur="checkProdId(this)" id="productId4-field" aria-describedby="productId4Help" >
+                        <select class="form-select" id="dropdown-id-list4" aria-label="Default select example" onblur="checkIfprodIdIsRepeated(this)">
+                        <option value="0">Open this select menu</option>
+                       </select>
                     </div>
                     <div class="mb-3 col-6">
                         <label for="InputName" class="form-label">QUANTITA PRODOTTO 4</label>
@@ -152,6 +164,7 @@
 
     $('body').on('click','.btn-outline-warning',(e)=>{
         
+        InsertProductsInSelect();
         getRefillStatus(e);
         
     });
@@ -167,6 +180,14 @@
     $('#updateMachineModal').on('hidden.bs.modal', function () {
         
         $('#updateMachineTitle .badge').remove(); 
+        showAllMachines();
+        
+    });
+    
+    $('#addRefillModal').on('hidden.bs.modal', function () {
+        
+        $('#refillModalLabel .badge').remove(); 
+        showAllMachines();
         
     });
     
@@ -185,91 +206,82 @@
     
     //-------------------------------------------------------------------------
     
-    function addRefillValidation(){
-        
-        let prod1Id = $('#productId1-field').val();
-        let prod1Quantity = $('#product1quantity-field').val();
-        let prod2Id = $('#productId2-field').val();
-        let prod2Quantity = $('#product2quantity-field').val();
-        let prod3Id = $('#productId3-field').val();
-        let prod3Quantity = $('#product3quantity-field').val();
-        let prod4Id = $('#productId4-field').val();
-        let prod4Quantity = $('#product4quantity-field').val();
-        
-        $('#productId1-field').removeClass('is-invalid');
+    function addRefillValidation(data){
+                        
+        $('#dropdown-id-list1').removeClass('is-invalid');
         $('#product1quantity-field').removeClass('is-invalid');
-        $('#productId2-field').removeClass('is-invalid');
+        $('#dropdown-id-list2').removeClass('is-invalid');
         $('#product2quantity-field').removeClass('is-invalid');
-        $('#productId3-field').removeClass('is-invalid');
+        $('#dropdown-id-list3').removeClass('is-invalid');
         $('#product3quantity-field').removeClass('is-invalid');
-        $('#productId4-field').removeClass('is-invalid');
+        $('#dropdown-id-list4').removeClass('is-invalid');
         $('#product4quantity-field').removeClass('is-invalid');
         
         let validation=true;
 
-        if(prod1Id===''){
+        if(data.prod1Id===''){
 
-            $("#productId1-field").addClass('is-invalid');
+            $("#dropdown-id-list1").addClass('is-invalid');
 
             validation=false;
         }
         
-        if(prod1Quantity===''){
+        if(data.prod1Quantity===''){
 
             $("#product1quantity-field").addClass('is-invalid');
 
             validation=false;
         }
         
-        prod1Quantity>=1 && prod1Quantity<=5 ? validation=true : vaidation=false;
+        data.prod1Quantity>=1 && data.prod1Quantity<=5 ? validation=true : vaidation=false;
         
-        if(prod2Id===''){
+        if(data.prod2Id===''){
 
-            $("#productId2-field").addClass('is-invalid');
+            $("#dropdown-id-list2").addClass('is-invalid');
 
             validation=false;
         }
         
-        if(prod2Quantity===''){
+        if(data.prod2Quantity===''){
 
             $("#product2quantity-field").addClass('is-invalid');
 
             validation=false;
         }
         
-        prod2Quantity>=1 && prod2Quantity<=5 ? validation=true : vaidation=false;
+        data.prod2Quantity>=1 && data.prod2Quantity<=5 ? validation=true : vaidation=false;
         
-        if(prod3Id===''){
+        if(data.prod3Id===''){
 
-            $("#productId3-field").addClass('is-invalid');
+            $("#dropdown-id-list3").addClass('is-invalid');
 
             validation=false;
         }
         
-        if(prod3Quantity===''){
+        if(data.prod3Quantity===''){
 
             $("#product3quantity-field").addClass('is-invalid');
 
             validation=false;
         }
         
-        prod3Quantity>=1 && prod3Quantity<=5 ? validation=true : vaidation=false;
+        data.prod3Quantity>=1 && data.prod3Quantity<=5 ? validation=true : vaidation=false;
         
-        if(prod4Id===''){
+        if(data.prod4Id===''){
 
-            $("#productId4-field").addClass('is-invalid');
+            $("#dropdown-id-list4").addClass('is-invalid');
 
             validation=false;
         }
         
-        if(prod4Quantity===''){
+        if(data.prod4Quantity===''){
 
             $("#product4quantity-field").addClass('is-invalid');
 
             validation=false;
         }
         
-        prod4Quantity>=1 && prod4Quantity<=5 ? validation=true : vaidation=false;
+        data.prod4Quantity>=1 && data.prod4Quantity<=5 ? validation=true : vaidation=false;
         
         return validation;
     }
@@ -287,19 +299,42 @@
         $.get(url,data,(response)=>{
             
             if(response.success){
-
-                response.prod1Id===0 ? $('#productId1-field').val('') : $('#productId1-field').val(response.prod1Id);
+                
+                $("#dropdown-id-list1 option[value="+response.prod1Id.toString()+"]").attr('selected', 'selected');
                 response.prod1Id===0 ? $('#product1quantity-field').val('') : $('#product1quantity-field').val(response.prod1Quantity);
-                response.prod2Id===0 ? $('#productId2-field').val('') : $('#productId2-field').val(response.prod2Id);
+                $("#dropdown-id-list2 option[value="+response.prod2Id.toString()+"]").attr('selected', 'selected');
                 response.prod2Id===0 ? $('#product2quantity-field').val('') : $('#product2quantity-field').val(response.prod2Quantity);
-                response.prod3Id===0 ? $('#productId3-field').val('') : $('#productId3-field').val(response.prod3Id);
+                $("#dropdown-id-list3 option[value="+response.prod3Id.toString()+"]").attr('selected', 'selected');
                 response.prod3Id===0 ? $('#product3quantity-field').val('') : $('#product3quantity-field').val(response.prod3Quantity);
-                response.prod4Id===0 ? $('#productId4-field').val('') : $('#productId4-field').val(response.prod4Id);
+                $("#dropdown-id-list4 option[value="+response.prod4Id.toString()+"]").attr('selected', 'selected');
                 response.prod4Id===0 ? $('#product4quantity-field').val('') : $('#product4quantity-field').val(response.prod4Quantity);
+               
             }
+        });
+    }
+    
+    function InsertProductsInSelect(){
+        
+        const url="/SmartVendingMachine/ProductsManagement/getAll";
+        
+        $.get({url:url,async:false},(response)=>{
+                                    
+            let dropdown = $('.form-select');
+            dropdown.empty();
+            let optionDefault="<option value="+0+">Open this select menu</option>";
+            dropdown.append(optionDefault);
             
+            response.products.forEach((product)=>{
+                
+                let prodOption = product.id.toString()+": "+product.name.toString();                     
+                let option = "<option value="+product.id+" id="+product.id+">"+prodOption+"</option>";
+                
+                dropdown.append(option);
+                
+            });
             
         });
+ 
     }
     
     function addRefill(machineId){
@@ -310,27 +345,30 @@
 
             machineId: machineId,
             techId:'<%= currentUser.getId()%>',
-            prod1Id:$('#productId1-field').val(),
+            prod1Id:$("#dropdown-id-list1 option:selected")[0].id,
             prod1Quantity:$('#product1quantity-field').val(),
-            prod2Id:$('#productId2-field').val(),
+            prod2Id:$("#dropdown-id-list2 option:selected")[0].id,
             prod2Quantity:$('#product2quantity-field').val(),
-            prod3Id:$('#productId3-field').val(),
+            prod3Id:$("#dropdown-id-list3 option:selected")[0].id,
             prod3Quantity:$('#product3quantity-field').val(),
-            prod4Id:$('#productId4-field').val(),
+            prod4Id:$("#dropdown-id-list4 option:selected")[0].id,
             prod4Quantity:$('#product4quantity-field').val()
 
         };
-
-        if(addRefillValidation()){
+                        
+        if(addRefillValidation(data)){
 
             const url="/SmartVendingMachine/RefillsManagement/addRefill";
 
             $.post(url,data,(response)=>{
+                
+                $('#refillModalLabel .badge').remove();
+                let success ='<span class="badge rounded-pill text-bg-success mx-2">Rifornita</span>';
+                let error ='<span class="badge rounded-pill text-bg-danger mx-2">capacità max raggiunta</span>';
+                
+                response.success===true ? $('#refillModalLabel').append(success) : $('#refillModalLabel').append(error);
 
-                if(response.success===true){
-
-                    showAllMachines();
-                }
+                
             });
 
         }
@@ -347,10 +385,14 @@
         $.get(url,(response)=>{
             
             if(response.success){
+                
+                let numMachines=0;
 
                 $('#machine-mngmt tbody').empty();
 
                 response.machines.forEach(machine=>{
+                    
+                    numMachines++;
 
                     let message= machine.actualCapacity==0 ? '<span class="badge rounded-pill text-bg-danger">Da rifornire</span>' : "";
 
@@ -384,7 +426,10 @@
                     $('#machine-mngmt tbody').append(record);
 
                });
-
+               
+               $('#machine-mngmt #actions .badge').remove();
+               let infoBadge='<span class="badge rounded-pill text-bg-info my-4 mx-2">Macchinette totali: '+numMachines+'</span>';
+               $('#machine-mngmt #actions').append(infoBadge);
                $('#machine-mngmt').css('display','block');
                $('.spinner-border').css('display','none');
             } 
@@ -472,7 +517,6 @@
                 $('#updateMachineTitle .badge').remove();                
                 $('#updateMachineTitle').append('<span class="badge rounded-pill text-bg-success mx-2">'+response.message+'</span>'); 
 
-                showAllMachines();
              }
 
          });
@@ -530,59 +574,33 @@
 
     }
     
-    function prodIdIsRepeated(productId){
-        
+    function checkIfprodIdIsRepeated(option){
+                        
         var isRepeated=false;
         var count=0;
-        
+        var productId=option.selectedIndex;
+                
         $("#addRefillModal form ").find(':input').each(function(index){
                         
-            if(index%2==0){
+            if(index%2===0 && productId!==0){
                 
-                productId==$(this).val() ? count++ : count;                
+                productId===this.selectedIndex ? count++ : count;
                 
             }
                             
         });
         
-        return isRepeated = count>1 ? true : false;
+        isRepeated = count>1 ? true : false;
+        
+        if(isRepeated){
+            
+            alert('non possono esservi prodotti ripetuti');
+            
+            $(option).val('0');
+            
+        }
         
     }
-        
-    function checkProdId(domElm){
-
-        let productId = $(domElm).val();
-        
-        if(productId!==''){
-
-            if(!prodIdIsRepeated(productId)){
-
-                if(productId!==''){
-
-                    const url="/SmartVendingMachine/ProductsManagement/getProduct";
-                    const data={productId:productId};
-
-                    $.get(url,data,(response)=>{
-
-                        if(response.success===false){
-
-                            alert('il prodotto: '+productId+' non esiste!');
-
-                            $(domElm).val('');
-                        }
-                    });
-
-                }
-
-            }
-            else{
-
-                alert('il prodotto '+productId+' non puo essere inserito piu di una volta');
-                $(domElm).val('');
-            }
-
-        }  
-    }
-    
+     
 </script>
 

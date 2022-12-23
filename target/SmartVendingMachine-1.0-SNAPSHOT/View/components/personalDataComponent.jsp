@@ -81,12 +81,6 @@
             updateAccount();
         });
         
-        
-        $('#deletePersonalDataBtn').click(()=>{
-            
-            deletePersonalData();
-        });
-        
         $('body').on('click','#deleteUsrBtn',()=>{
 
             deleteAccount();

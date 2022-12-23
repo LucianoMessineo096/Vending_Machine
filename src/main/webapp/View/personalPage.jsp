@@ -50,7 +50,7 @@
     
                 <div id="machineConnectionSection"> 
                     
-                    <div id="machineConnectionBody" class="d-flex flex-row col-12"></div>
+                    <div id="machineConnectionBody" class="row d-flex flex-row justify-content-center"></div>
                     
                 </div>
    
@@ -224,7 +224,7 @@
 
                             if(machine.status==='active' || machine.status==='free'){
 
-                                let card = '<div id='+machine.id.toString()+' class="card text-center col-4 m-3" style="max-width: 540px;">'+
+                                let card = '<div id='+machine.id.toString()+' class="card text-center col-3 m-3" style="max-width: 540px;">'+
                                                 '<div class="row g-0">'+
                                                    '<div class="col-md-4 my-5 px-1">'+
                                                      '<img src="/SmartVendingMachine/View/img/machine.png" class="img-fluid rounded-start" alt="...">'+
