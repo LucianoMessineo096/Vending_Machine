@@ -12,7 +12,7 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Server attualmente non funzionante, si prega di ritornare alla home.</h1>
+        <h1>Servizio attualmente non disponibile, si prega di ritornare alla home.</h1>
         <a href="/SmartVendingMachine">Ritorna alla home</a>
     </body>
 </html>
