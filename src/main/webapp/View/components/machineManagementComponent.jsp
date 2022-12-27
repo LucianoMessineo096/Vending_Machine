@@ -9,9 +9,9 @@
 <!DOCTYPE html>
 <div id="machine-mngmt">
     
-    <div id="actions" class="d-flex flex-row m-0 p-0 justify-content-between">
+    <div class="d-flex flex-row m-0 p-0 justify-content-between">
         <button type="button" class="btn btn-success my-3"data-bs-toggle="modal" data-bs-target="#addMachineModal">Inserisci Macchinetta</button>
-        
+        <div id="actions" class="d-flex flex-row m-0 p-0 justify-content-between"></div>
     </div>
     
     <table class="table table-striped">
@@ -340,7 +340,8 @@
     function addRefill(machineId){
          
         <% User currentUser = (User)session.getAttribute("currentSessionUser"); %>
-            
+        
+        const url="/SmartVendingMachine/RefillsManagement/addRefill";
         const data={
 
             machineId: machineId,
@@ -358,8 +359,6 @@
                         
         if(addRefillValidation(data)){
 
-            const url="/SmartVendingMachine/RefillsManagement/addRefill";
-
             $.post(url,data,(response)=>{
                 
                 $('#refillModalLabel .badge').remove();
@@ -367,7 +366,6 @@
                 let error ='<span class="badge rounded-pill text-bg-danger mx-2">capacità max raggiunta</span>';
                 
                 response.success===true ? $('#refillModalLabel').append(success) : $('#refillModalLabel').append(error);
-
                 
             });
 
@@ -386,15 +384,18 @@
             
             if(response.success){
                 
-                let numMachines=0;
+                let totalMachines=0;
+                let totalMachinesActive=0;
+                let totalMachinesDisabled=0;
 
                 $('#machine-mngmt tbody').empty();
 
                 response.machines.forEach(machine=>{
                     
-                    numMachines++;
+                    machine.status==='free' || machine.status==='active' ? totalMachinesActive++ : totalMachinesDisabled++;
+                    totalMachines++;
 
-                    let message= machine.actualCapacity==0 ? '<span class="badge rounded-pill text-bg-danger">Da rifornire</span>' : "";
+                    let message= machine.actualCapacity===0 ? '<span class="badge rounded-pill text-bg-danger">Da rifornire</span>' : "";
 
                     let updateBtnEnabled = '<button id="updateMachineBtn" type="button" class="btn btn-outline-success mx-1" data-bs-toggle="modal" data-bs-target="#updateMachineModal">'+
                                                 '<i class="bi bi-pencil"></i>'+
@@ -403,7 +404,7 @@
                                                 '<i class="bi bi-pencil"></i>'+
                                             '</button>';
                                     
-                    let updateBtn = machine.actualCapacity==0 ? updateBtnDisabled : updateBtnEnabled;                
+                    let updateBtn = machine.actualCapacity===0 ? updateBtnDisabled : updateBtnEnabled;                
                     
                     let record = '<tr id='+machine.id.toString()+'>'+'<td>'+machine.id.toString()+'</td>'+
                                  '<td>'+machine.name.toString()+'</td>'+
@@ -428,8 +429,10 @@
                });
                
                $('#machine-mngmt #actions .badge').remove();
-               let infoBadge='<span class="badge rounded-pill text-bg-info my-4 mx-2">Macchinette totali: '+numMachines+'</span>';
-               $('#machine-mngmt #actions').append(infoBadge);
+               let infoBadge='<span class="badge rounded-pill text-bg-info my-4 mx-2">Macchinette totali: '+totalMachines+'</span>';
+               let infoBadge2='<span class="badge rounded-pill text-bg-success my-4 mx-2">Macchinette attive: '+totalMachinesActive+'</span>';
+               let infoBadge3='<span class="badge rounded-pill text-bg-danger my-4 mx-2">Macchinette disattive: '+totalMachinesDisabled+'</span>';
+               $('#machine-mngmt #actions').append(infoBadge,infoBadge2,infoBadge3);
                $('#machine-mngmt').css('display','block');
                $('.spinner-border').css('display','none');
             } 

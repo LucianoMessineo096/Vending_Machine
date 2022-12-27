@@ -13,6 +13,9 @@
     </head>
     <body>
         <h1>Servizio attualmente non disponibile, si prega di ritornare alla home.</h1>
-        <a href="/SmartVendingMachine">Ritorna alla home</a>
+        
+        <div><img class="m-5" src="/SmartVendingMachine/View/img/500cat.gif"></div>
+        <a class="btn btn-primary m-5" href="/SmartVendingMachine">Ritorna alla home</a>
+        
     </body>
 </html>

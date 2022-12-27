@@ -45,7 +45,7 @@
                         <span class="visually-hidden">Loading...</span>
                     </div>
                 </div>
-                
+                    
                 <jsp:include page="/View/components/personalDataComponent.jsp"></jsp:include>
     
                 <div id="machineConnectionSection"> 
@@ -250,7 +250,7 @@
                     else{
                     
                         $('#machineConnectionBody').empty();
-                        $('#machineConnectionBody').append('<div class="alert alert-warning m-3" role="alert">Nessuna macchinetta al momento disponibile!</div>');
+                        $('#machineConnectionBody').append('<div class="alert alert-warning my-3" role="alert">Nessuna macchinetta al momento disponibile!</div>');
                         $('#machineConnectionSection').css('display','block');
                         $('.spinner-border').css('display','none');
                     }

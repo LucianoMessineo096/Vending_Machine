@@ -151,7 +151,10 @@ public class ProductsManagement extends HttpServlet {
     }
     
     protected HashMap<Refill,Integer> getProductColumnsIndex(ArrayList<Refill> refills,int productId) throws IllegalArgumentException, IllegalAccessException{
-    
+        
+        //description : this function return an HashMap that contain the column index
+        //              of the product for a specified refill
+        
         HashMap<Refill,Integer> columnsIndex = new HashMap<>();
         
         for(Refill refill : refills){
@@ -196,7 +199,7 @@ public class ProductsManagement extends HttpServlet {
         HashMap<Refill,Integer> columnsIndex = getProductColumnsIndex(refills,productId);
         
         for(HashMap.Entry<Refill,Integer> refill : columnsIndex.entrySet()){
-            
+                        
             //set 0 the specified product quantity
             refillServices.updateRefill(refill.getValue(),productId);
             

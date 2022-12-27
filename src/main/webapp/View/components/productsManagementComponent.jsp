@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <div id="Products">
+
     <div id="actions" class="d-flex flex-row m-0 p-0 justify-content-between">
         <button type="button" class="btn btn-success my-3" data-bs-toggle="modal" data-bs-target="#addProductModal">Inserisci Prodotto</button>
     </div>
@@ -29,8 +30,11 @@
      <div class="modal-dialog modal-dialog-centered">
        <div class="modal-content">
          <div class="modal-header">
-           <h1 class="modal-title fs-5" id="addModalLabel">Aggiungi Prodotto</h1>
-           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div id="addProductHeader" class="d-flex flex-row justify-content-between m-0 p-0">
+                <h1 class="modal-title fs-5" id="addModalLabel">Aggiungi Prodotto</h1>
+
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
          </div>
          <div class="modal-body">
              <form>
@@ -40,7 +44,7 @@
                 </div>
                 <div class="mb-3">
                   <label for="InputPrice" class="form-label">Prezzo</label>
-                  <input type="number" class="form-control" id="price-field">
+                  <input type="number" min="0" class="form-control" id="price-field">
                 </div>
                 <div class="mb-3">
                   <label for="InputTypology" class="form-label">Tipologia</label>
@@ -106,7 +110,16 @@
         
         $('#updateProductTitle .badge').remove(); 
         
-    }) 
+    });
+    
+    $('#addProductModal').on('hidden.bs.modal', function () {
+
+        $('#addProductModal .modal-body #price-field').removeClass('is-invalid');
+        $('#addProductModal .modal-body #description-field').removeClass('is-invalid');
+        $('#addProductModal .modal-body #description-field').val('');
+        $('#addProductModal .modal-body #price-field').val('');
+        
+    });
     
     //------------------------------------------------------------------------
     
@@ -276,30 +289,78 @@
         const name = $('#addProductModal .modal-body #description-field').val();
         const price = $('#addProductModal .modal-body #price-field').val();
         const typology = $('#addProductOptions option:selected').val();
+        
+        let validated = addProductValidation(name,price);
+                
+        if(validated){
+            
+            const url='/SmartVendingMachine/ProductsManagement/addProduct';
 
-        const url='/SmartVendingMachine/ProductsManagement/addProduct';
+            const data={
 
-        const data={
+                name:name,
+                price:price,
+                typology:typology
 
-            name:name,
-            price:price,
-            typology:typology
+            };
 
-        };
+            $.post(url,data,(response)=>{
 
-        $.post(url,data,(response)=>{
+                if(response.success){
+                    
+                    showAllProducts();
+                    $('#addProductModal .modal-body #description-field').val('');
+                    $('#addProductModal .modal-body #price-field').val('');
+                }
 
-            if(response.success){
+            });
+        }
 
-                showAllProducts();
-
-                $('#addProductModal .modal-body #description-field').val('');
-                $('#addProductModal .modal-body #price-field').val('');
-
-            }
-
-        });
-
+    }
+    
+    function addProductValidation(name,price){
+                
+        $('#addProductModal .modal-body #price-field').removeClass('is-invalid');
+        $('#addProductModal .modal-body #description-field').removeClass('is-invalid');
+        
+        validation=true;
+        
+        let regex=/^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)$/;
+        
+        if(price.toString()===''){
+            
+            $('#addProductModal .modal-body #price-field').addClass('is-invalid');
+            
+            validation=false;
+        }
+        
+        if(price.toString().match(regex)===null){
+            
+            $('#addProductModal .modal-body #price-field').addClass('is-invalid');
+            
+            validation=false;
+            
+        }
+        
+        if(price<0){
+            
+            $('#addProductModal .modal-body #price-field').addClass('is-invalid');
+            let error='<span class="badge rounded-pill text-bg-danger my-4 mx-2"></span>';
+            
+            validation=false;
+            
+        }
+        
+        if(name.toString()===''){
+            
+            $('#addProductModal .modal-body #description-field').addClass('is-invalid');
+            
+            validation=false;
+            
+        }
+        
+        return validation;
+  
     }
         
 </script>

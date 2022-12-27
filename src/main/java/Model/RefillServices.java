@@ -42,17 +42,18 @@ public class RefillServices {
     public ArrayList<Refill> getAllRefills() throws SQLException{
     
         ArrayList<Refill> refills = new ArrayList<>();
-        Refill refill = new Refill();
         String statement = "SELECT * FROM refills";
         
         DataSourceFactory dataSource = new DataSourceFactory();
         Connection connection = dataSource.getConnection();
-        
+
         PreparedStatement query = connection.prepareStatement(statement);
         ResultSet resultSet = query.executeQuery();
-        
-        if(resultSet.next()){
+
+        while(resultSet.next()){
             
+            Refill refill = new Refill();
+                        
             refill.setId(resultSet.getInt("id"));
             refill.setMachId(resultSet.getInt("machId"));
             refill.setTechId(resultSet.getInt("techId"));
@@ -67,6 +68,10 @@ public class RefillServices {
             
             refills.add(refill);
         }
+        
+        query.close();
+        resultSet.close();
+        connection.close();
         
         return refills;
     

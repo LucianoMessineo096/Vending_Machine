@@ -9,7 +9,7 @@
 <!DOCTYPE html>
 <div id="Users">
     
-    <div id="actions" class="d-flex flex-row m-0 p-0 justify-content-between">
+    <div id="actions" class="d-flex flex-row m-2 p-0 justify-content-between">
         <p></p>
     </div>
 

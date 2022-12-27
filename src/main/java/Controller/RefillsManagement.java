@@ -29,7 +29,7 @@ import org.json.JSONObject;
  *
  * @author luciano
  */
-@WebServlet(name = "RefillsManagement", urlPatterns = {"/RefillsManagement","/RefillsManagement/addRefill","/RefillsManagement/getRefill"})
+@WebServlet(name = "RefillsManagement", urlPatterns = {"/RefillsManagement","/RefillsManagement/addRefill","/RefillsManagement/getRefill","/RefillsManagement/getAll"})
 public class RefillsManagement extends HttpServlet {
     
     /*************************************************************************/
@@ -252,6 +252,27 @@ public class RefillsManagement extends HttpServlet {
             {
                 try {
                     getRefill(request,response);
+                } catch (SQLException ex) {
+                    Logger.getLogger(RefillsManagement.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+                
+                break;
+            
+            case "/SmartVendingMachine/RefillsManagement/getAll":
+                
+                RefillServices rs = new RefillServices();
+            {
+                try {
+                    ArrayList<Refill> refills = rs.getAllRefills();
+                    JSONObject Jlocation = new JSONObject();
+                    Jlocation.put("success", true);
+                    Jlocation.put("refills", refills);
+                    String location = Jlocation.toString();
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write(location);
+                    
                 } catch (SQLException ex) {
                     Logger.getLogger(RefillsManagement.class.getName()).log(Level.SEVERE, null, ex);
                 }
