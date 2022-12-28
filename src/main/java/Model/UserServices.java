@@ -47,6 +47,10 @@ public class UserServices {
             user.setWalletBalance(resultSet.getFloat("walletBalance"));
         }
         
+        query.close();
+        resultSet.close();
+        connection.close();
+        
         return user;
     
     }
@@ -70,7 +74,9 @@ public class UserServices {
             exists=true;
         }
         
-        System.out.println(exists);
+        query.close();
+        resultSet.close();
+        connection.close();
         
         return exists;
     
@@ -102,6 +108,10 @@ public class UserServices {
             user.setWalletBalance(resultSet.getFloat("walletBalance"));
         }
         
+        query.close();
+        resultSet.close();
+        connection.close();
+        
         return user;
     
     }
@@ -131,6 +141,10 @@ public class UserServices {
             inserted=true;
         
         }
+        
+        query.close();
+        connection.close();
+        
         return inserted;
     }
     
@@ -152,6 +166,9 @@ public class UserServices {
         
             deleted=true;
         }
+        
+        query.close();
+        connection.close();
         
         return deleted;
     }
@@ -179,6 +196,9 @@ public class UserServices {
             updated=true;
         
         }
+        
+        query.close();
+        connection.close();
         
         return updated;
     
@@ -208,6 +228,9 @@ public class UserServices {
         
         }
         
+        query.close();
+        connection.close();
+        
         return updated;
         
     }
@@ -232,6 +255,9 @@ public class UserServices {
         
         }
         
+        query.close();
+        connection.close();
+        
         return updated;
     }
     
@@ -254,6 +280,9 @@ public class UserServices {
             updated=true;
         
         }
+        
+        query.close();
+        connection.close();
         
         return updated;
     
@@ -289,14 +318,12 @@ public class UserServices {
 
         }
         
+        query.close();
+        resultSet.close();
+        connection.close();
+        
         return users;
     
     }
-
-    //-----------------UTILS FUNCTIONS---------------------------------//
-    
-    
-
-    
-    
+ 
 }

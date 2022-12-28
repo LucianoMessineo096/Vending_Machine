@@ -35,6 +35,11 @@ public class RefillServices {
             check=true;
         
         }
+        
+        query.close();
+        resultSet.close();
+        connection.close();
+        
         return check;
 
     }
@@ -105,6 +110,10 @@ public class RefillServices {
             refill.setProd4Quantity(resultSet.getInt("prod4Quantity"));
         }
         
+        query.close();
+        resultSet.close();
+        connection.close();
+        
         return refill;
     }
     
@@ -144,6 +153,10 @@ public class RefillServices {
             inserted=true;
         
         }
+        
+        query.close();
+        connection.close();
+        
         return inserted;
     
     }
@@ -180,6 +193,10 @@ public class RefillServices {
             updated=true;
         
         }
+        
+        query.close();
+        connection.close();
+        
         return updated;
     
     }
@@ -204,60 +221,24 @@ public class RefillServices {
         
         }
         
+        query.close();
+        connection.close();
+        
         return updated;
     
     }
     
-    public boolean updateRefill(int machineId,HashMap<Integer,Integer> machineProducts) throws SQLException
+    public boolean updateRefill(int machineId,int newQuantity,int productColumnIndex) throws SQLException
     {
-    
-        boolean updated = false;
-        int count=1;
-        //String statement = "UPDATE refills SET prod1Id=?,prod1Quantity=?,
-        //prod2Id=?,prod2Quantity=?,prod3Id=?,prod3Quantity=?,prod4Id=?,prod4Quantity=? WHERE machId=?";
+        boolean updated=false;
+        String statement = "UPDATE refills SET prod"+productColumnIndex+"Quantity=? WHERE machId=?";
         
-        String statement= "UPDATE refills SET ";
-        
-        for(HashMap.Entry<Integer,Integer> prod : machineProducts.entrySet()){
-            
-            if(count==1){
-                
-                statement+= "prod"+count+"Id=?,prod"+count+"Quantity=?";
-                
-            }
-            
-            if(count==machineProducts.size()){
-                
-                statement+= ",prod"+count+"Id=?,prod"+count+"Quantity=?";
-            
-            }
-            
-            if(count>1 && count<machineProducts.size()){
-                
-                statement+= ",prod"+count+"Id=?,prod"+count+"Quantity=?";
-            
-            }
-            
-            count++;
-        }
-        
-        statement+=" WHERE machId=?";
-        
-        count=1;
-                
         DataSourceFactory dataSource = new DataSourceFactory();
         Connection connection = dataSource.getConnection();
         
         PreparedStatement query = connection.prepareStatement(statement);
-        
-        for(HashMap.Entry<Integer,Integer> prod : machineProducts.entrySet()){
-            query.setInt(count,prod.getKey());
-            count++;
-            query.setInt(count,prod.getValue());
-            count++;
-        }
-        
-        query.setInt(count, machineId);
+        query.setInt(1,newQuantity);
+        query.setInt(2,machineId);
         
         int rowCount = query.executeUpdate();
         
@@ -266,8 +247,12 @@ public class RefillServices {
             updated=true;
         
         }
+        
+        query.close();
+        connection.close();
+        
         return updated;
-    
+
     }
     
     

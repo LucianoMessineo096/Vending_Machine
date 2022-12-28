@@ -36,6 +36,10 @@ public class MovementServices {
             inserted=true;
         
         }
+        
+        query.close();
+        connection.close();
+        
         return inserted;
 
     }
@@ -46,27 +50,31 @@ public class MovementServices {
     
         String statement = "SELECT * FROM movements WHERE userId=?";
 
-            DataSourceFactory dataSource = new DataSourceFactory();
-            Connection connection = dataSource.getConnection();
+        DataSourceFactory dataSource = new DataSourceFactory();
+        Connection connection = dataSource.getConnection();
 
-            PreparedStatement query = connection.prepareStatement(statement);
-            query.setInt(1, userId);
+        PreparedStatement query = connection.prepareStatement(statement);
+        query.setInt(1, userId);
 
-            ResultSet resultSet = query.executeQuery();
+        ResultSet resultSet = query.executeQuery();
 
-            while(resultSet.next()){
+        while(resultSet.next()){
 
-                Movement movement = new Movement();
+            Movement movement = new Movement();
 
-                movement.setId(resultSet.getInt("id"));
-                movement.setUserId(resultSet.getInt("userId"));
-                movement.setValue(resultSet.getFloat("value"));
-                movement.setDate(resultSet.getNString("date"));
-                movement.setType(resultSet.getNString("type"));
-                
-                movements.add(movement);
+            movement.setId(resultSet.getInt("id"));
+            movement.setUserId(resultSet.getInt("userId"));
+            movement.setValue(resultSet.getFloat("value"));
+            movement.setDate(resultSet.getNString("date"));
+            movement.setType(resultSet.getNString("type"));
 
-            }
+            movements.add(movement);
+
+        }
+        
+        query.close();
+        resultSet.close();
+        connection.close();
 
         return movements;
 

@@ -89,62 +89,99 @@ public class PurchasesManagement extends HttpServlet {
         return check;
     }
     
-    protected HashMap<Integer,Integer> updateQuantity(Product product,Refill refill,Machine machine){
+    protected void updateRefillQuantity(Product product,Refill refill){
     
-        int updatedQuantity;
-        
-        HashMap<Integer,Integer> machineProducts = new HashMap<Integer,Integer>();
-        
-        if(refill.getProd1Id()!=0){
-            machineProducts.put(refill.getProd1Id(),refill.getProd1Quantity());
-        }
-        
-        if(refill.getProd2Id()!=0){
+        if(refill.getProd1Id()==product.getId()){
             
-            machineProducts.put(refill.getProd2Id(),refill.getProd2Quantity());
+            refill.setProd1Quantity(refill.getProd1Quantity()-1);
         }
         
-        if(refill.getProd3Id()!=0){
+        if(refill.getProd2Id()==product.getId()){
             
-            machineProducts.put(refill.getProd3Id(),refill.getProd3Quantity());
+            refill.setProd2Quantity(refill.getProd2Quantity()-1);
         }
         
-        if(refill.getProd4Id()!=0){
+        if(refill.getProd3Id()==product.getId()){
             
-            machineProducts.put(refill.getProd4Id(),refill.getProd4Quantity());
+            refill.setProd3Quantity(refill.getProd3Quantity()-1);
+        }
         
+        if(refill.getProd4Id()==product.getId()){
+            
+            refill.setProd4Quantity(refill.getProd4Quantity()-1);
         }
-          
-        for(HashMap.Entry<Integer,Integer> prod : machineProducts.entrySet()){
-                       
-            if(prod.getKey()==product.getId()){
-
-                updatedQuantity = prod.getValue() - 1;
-                prod.setValue(updatedQuantity);
-            }
-
-        }
-
-        return machineProducts;
 
     }
     
-    protected int calculateNewCapacity(HashMap<Integer,Integer> machineProducts){
+    protected int calculateNewCapacity(Machine machine){
     
-        int newActualCapacity=0;
+        machine.setActualCapacity(machine.getActualCapacity()-1);
         
-        for(HashMap.Entry<Integer,Integer> prod : machineProducts.entrySet()){
-           
-            newActualCapacity+=prod.getValue();
-
-        }
-        
-        return newActualCapacity;
+        return machine.getActualCapacity();
         
     
     }
     
-    protected void doPurchase(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, IOException, SQLException{
+    protected int getProductColumnIndex(Refill refill,Product product) throws IllegalArgumentException, IllegalAccessException{
+        
+        //description : this function return an HashMap that contain the column index
+        //              of the product for a specified refill
+        
+        int columnIndex=0;
+        
+        if(refill.getProd1Id()==product.getId()){
+
+            columnIndex=1;
+
+        }else if(refill.getProd2Id()==product.getId()){
+
+            columnIndex=2;
+            
+        }else if(refill.getProd3Id()==product.getId()){
+
+            columnIndex=3;
+
+        }else if(refill.getProd4Id()==product.getId()){
+
+            columnIndex=4;
+
+        }else{
+
+        }
+
+        return columnIndex;
+
+    }
+
+    protected int getNewQuantity(Refill refill,Product product){
+        
+        int newQuantity=0;
+        
+        if(refill.getProd1Id()==product.getId()){
+            
+            newQuantity=refill.getProd1Quantity();
+        }
+        
+        if(refill.getProd2Id()==product.getId()){
+            
+            newQuantity=refill.getProd2Quantity();
+        }
+        
+        if(refill.getProd3Id()==product.getId()){
+            
+            newQuantity=refill.getProd3Quantity();
+        }
+        
+        if(refill.getProd4Id()==product.getId()){
+            
+            newQuantity=refill.getProd4Quantity();
+        }
+        
+        return newQuantity;
+    
+    }
+    
+    protected void doPurchase(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, IOException, SQLException, IllegalArgumentException, IllegalAccessException{
     
         PurchaseServices purchaseService = new PurchaseServices();
         ProductServices productService = new ProductServices();
@@ -164,9 +201,9 @@ public class PurchasesManagement extends HttpServlet {
         Machine machine = machineServices.getMachine(machineId);
         Refill refill = refillServices.getRefill(machineId);
         
-        boolean checkQuantity = checkQuantity(product,refill,machine);
+        boolean checked = checkQuantity(product,refill,machine);
                 
-        if(checkQuantity){
+        if(checked){
         
             float price = product.getPrice();
             float balance = user.getWalletBalance();
@@ -186,10 +223,12 @@ public class PurchasesManagement extends HttpServlet {
                     purchaseService.addPurchase(userId,productId,machineId,formattedDate,price);
                     movementServices.addMovement(userId, price, formattedDate, "purchase");
 
-                    HashMap<Integer,Integer> machineProducts = updateQuantity(product,refill,machine);
-                    boolean updated=refillServices.updateRefill(machineId,machineProducts);
+                    updateRefillQuantity(product,refill);
+                    int productColumnIndex = getProductColumnIndex(refill,product);
+                    int newQuantity = getNewQuantity(refill,product);
+                    boolean updated=refillServices.updateRefill(machineId,newQuantity,productColumnIndex);
                     
-                    int newActualCapacity = calculateNewCapacity(machineProducts);
+                    int newActualCapacity =calculateNewCapacity(machine);
                     machineServices.updateMachine(machineId, newActualCapacity);
 
                     Jlocation.put("success", true);
@@ -318,6 +357,10 @@ public class PurchasesManagement extends HttpServlet {
                 try {
                     doPurchase(request,response);
                 } catch (SQLException ex) {
+                    Logger.getLogger(PurchasesManagement.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalArgumentException ex) {
+                    Logger.getLogger(PurchasesManagement.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
                     Logger.getLogger(PurchasesManagement.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }

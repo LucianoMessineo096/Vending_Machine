@@ -38,6 +38,9 @@ public class ProductServices {
         
         }
         
+        query.close();
+        resultSet.close();
+        connection.close();
         
         return product;
     
@@ -72,6 +75,9 @@ public class ProductServices {
             
         }
         
+        query.close();
+        resultSet.close();
+        connection.close();
         
         return products;
     
@@ -95,6 +101,8 @@ public class ProductServices {
             deleted=true;
         }
         
+        query.close();
+        connection.close();
         
         return deleted;
     
@@ -119,7 +127,9 @@ public class ProductServices {
         
             added=true;
         }
-    
+        
+        query.close();
+        connection.close();
     
         return added;
     }
@@ -145,6 +155,9 @@ public class ProductServices {
             updated=true;
         
         }
+        
+        query.close();
+        connection.close();
         
         return updated;
 

@@ -319,7 +319,7 @@
         
         $.get({url:url,async:false},(response)=>{
                                     
-            let dropdown = $('.form-select');
+            let dropdown = $('#machine-mngmt .form-select');
             dropdown.empty();
             let optionDefault="<option value="+0+">Open this select menu</option>";
             dropdown.append(optionDefault);

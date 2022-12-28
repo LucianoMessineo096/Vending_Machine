@@ -56,8 +56,8 @@
                
                numPurchases++;
                totalCost+=parseFloat(purchase.cost);
-               
-               let description = response.products[index].name==='undefined' ? response.products[index].name : 'N/A';
+                              
+               let description = response.products[index].name!==undefined ? response.products[index].name : 'N/A';
                
                let record = '<tr>'+'<td>'+purchase.id.toString()+'</td>'+
                                 '<td>'+description+'</td>'+

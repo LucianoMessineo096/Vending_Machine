@@ -100,7 +100,7 @@
         //Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character:
         let passRegex=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
         let emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
-        let textRegex = /^[a-zA-Z ]+$/;
+        let textRegex = /^[a-zA-Z]+$/;
 
         if($("#newEmail").val().match(emailRegex)===null){
 

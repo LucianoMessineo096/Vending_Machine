@@ -107,9 +107,10 @@
                     
                 }
                 
-
+                
             });
             
+            numUsers--;
             $('#Users #actions .badge').remove();
             let infoBadge='<span class="badge rounded-pill text-bg-info my-4 mx-2">Utenti totali: '+numUsers+'</span>';
             $('#Users #actions').append(infoBadge);
@@ -117,6 +118,42 @@
             $('.spinner-border').css('display','none');
         });
 
+    }
+    
+    function updateUserValidation(data){
+    
+        $("#email-field").removeClass('is-invalid');
+        $("#name-field").removeClass('is-invalid');
+        $("#surname-field").removeClass('is-invalid');
+        
+        let validation=true;
+        
+        let emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+        let textRegex = /^[a-zA-Z]+$/;
+
+        if($("#email-field").val().match(emailRegex)===null){
+
+            $("#email-field").addClass('is-invalid');
+
+            validation=false;
+        }
+
+        if($("#name-field").val().match(textRegex)===null){
+
+            $("#name-field").addClass('is-invalid');
+
+            validation=false;
+        }
+
+        if($("#surname-field").val().match(textRegex)===null){
+
+            $("#surname-field").addClass('is-invalid');
+
+            validation=false;
+        }
+
+        return validation;
+    
     }
 
     function updateUser(){
@@ -129,21 +166,28 @@
             surname: $('#updateUserModal .modal-body form #surname-field').val(),
             type: $('#updateUserOptions option:selected').val()
         };
+        
+        let validated = updateUserValidation(data);
+        
+        if(validated){
+            
+            const url='/SmartVendingMachine/UsersManagement/updateUser';
 
-        const url='/SmartVendingMachine/UsersManagement/updateUser';
+            $.post(url,data,(response)=>{
 
-        $.post(url,data,(response)=>{
+                if(response.success){
 
-            if(response.success){
-                
-                $('.modal-title .badge').remove();                
-                $('.modal-title').append('<span class="badge rounded-pill text-bg-success mx-2">'+response.message+'</span>');
+                    $('.modal-title .badge').remove();                
+                    $('.modal-title').append('<span class="badge rounded-pill text-bg-success mx-2">'+response.message+'</span>');
 
-                showAllUsers();
+                    showAllUsers();
 
-            }
+                }
 
-        });
+            });
+            
+        }
+        
     }
 
     function deleteUser(event){

@@ -39,6 +39,9 @@ public class PurchaseServices {
         
         }
         
+        query.close();
+        connection.close();
+        
         return added;
     }   
     
@@ -71,6 +74,10 @@ public class PurchaseServices {
             
             
         }
+        
+        query.close();
+        resultSet.close();
+        connection.close();
         
         return purchases;
     

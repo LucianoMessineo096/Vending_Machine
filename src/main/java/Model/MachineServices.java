@@ -36,6 +36,9 @@ public class MachineServices {
         
         }
         
+        query.close();
+        connection.close();
+        
         return changed;
     
     }
@@ -68,6 +71,10 @@ public class MachineServices {
 
         }
         
+        query.close();
+        resultSet.close();
+        connection.close();
+        
         return machines;
     }
     
@@ -94,6 +101,9 @@ public class MachineServices {
         
         }
         
+        query.close();
+        resultSet.close();
+        connection.close();
         
         return machine;
     
@@ -118,6 +128,8 @@ public class MachineServices {
             deleted=true;
         }
         
+        query.close();
+        connection.close();
         
         return deleted;
     
@@ -140,7 +152,10 @@ public class MachineServices {
         
             added=true;
         }
-
+        
+        query.close();
+        connection.close();
+        
         return added;
     }
 
@@ -165,6 +180,9 @@ public class MachineServices {
         
         }
         
+        query.close();
+        connection.close();
+        
         return updated;
 
     }
@@ -188,6 +206,9 @@ public class MachineServices {
             updated=true;
         
         }
+        
+        query.close();
+        connection.close();
         
         return updated;
 
