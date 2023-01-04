@@ -68,6 +68,8 @@
 
     });
     
+    //-------------------------------------------------------------------------
+    
     function _validation(){
         
         $(".offcanvas .offcanvas-body #recharge-value").removeClass('is-invalid');

@@ -71,7 +71,7 @@
            $('#purchases #actions .badge').remove();
            $('#purchases .badge').remove();
            let infoBadge='<span class="badge rounded-pill text-bg-info my-4 mx-2">Acquisti effettuati: '+numPurchases+'</span>';
-           let costBadge='<span class="badge rounded-pill text-bg-warning my-4 mx-2">Totale speso: '+totalCost+'</span>';
+           let costBadge='<span class="badge rounded-pill text-bg-warning my-4 mx-2">Totale speso: €'+totalCost+'</span>';
            $('#purchases #actions').append(infoBadge,costBadge);
            $('#purchases').css('display','block');
            $('.spinner-border').css('display','none');

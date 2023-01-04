@@ -42,8 +42,6 @@
         </ul>
       </div>
     </div>
-    
-    <!-- href="/SmartVendingMachine/UsersManagement/personalPage" -->
 </nav>
 <script>
     

@@ -250,18 +250,24 @@
 
         const url='/SmartVendingMachine/ProductsManagement/updateProduct';
         
-        $.post(url,data,(response)=>{
+        let validated = productValidation(data.name,data.price,"update");
+        
+        if(validated){
+            
+            $.post(url,data,(response)=>{
 
-            if(response.success){
-                
-                $('#updateProductTitle .badge').remove();                
-                $('#updateProductTitle').append('<span class="badge rounded-pill text-bg-success mx-2">'+response.message+'</span>'); 
+                if(response.success){
 
-                showAllProducts();
-            }
+                    $('#updateProductTitle .badge').remove();                
+                    $('#updateProductTitle').append('<span class="badge rounded-pill text-bg-success mx-2">'+response.message+'</span>'); 
 
-        });
+                    showAllProducts();
+                }
 
+            });
+            
+        }
+        
     }
 
     function deleteProduct(event){
@@ -290,7 +296,7 @@
         const price = $('#addProductModal .modal-body #price-field').val();
         const typology = $('#addProductOptions option:selected').val();
         
-        let validated = addProductValidation(name,price);
+        let validated = productValidation(name,price,"add");
                 
         if(validated){
             
@@ -317,50 +323,100 @@
         }
 
     }
-    
-    function addProductValidation(name,price){
+   
+    function productValidation(name,price,type){
+        
+        if(type==='add'){
+            
+            $('#addProductModal .modal-body #price-field').removeClass('is-invalid');
+            $('#addProductModal .modal-body #description-field').removeClass('is-invalid');
+
+            let validation=true;
+
+            let regex=/^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)$/;
+
+            if(price.toString()===''){
+
+                $('#addProductModal .modal-body #price-field').addClass('is-invalid');
+
+                validation=false;
+            }
+
+            if(price.toString().match(regex)===null){
+
+                $('#addProductModal .modal-body #price-field').addClass('is-invalid');
+
+                validation=false;
+
+            }
+
+            if(price<0){
+
+                $('#addProductModal .modal-body #price-field').addClass('is-invalid');
+                let error='<span class="badge rounded-pill text-bg-danger my-4 mx-2"></span>';
+
+                validation=false;
+
+            }
+
+            if(name.toString()===''){
+
+                $('#addProductModal .modal-body #description-field').addClass('is-invalid');
+
+                validation=false;
+
+            }
+
+            return validation;
+            
+        }
+        
+        if(type==='update'){
+            
+            $('#updateProductModal .modal-body #price-field').removeClass('is-invalid');
+            $('#updateProductModal .modal-body #description-field').removeClass('is-invalid');
+
+            let validation=true;
+
+            let regex=/^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)$/;
+
+            if(price.toString()===''){
+
+                $('#updateProductModal .modal-body #price-field').addClass('is-invalid');
+
+                validation=false;
+            }
+
+            if(price.toString().match(regex)===null){
+
+                $('#updateProductModal .modal-body #price-field').addClass('is-invalid');
+
+                validation=false;
+
+            }
+
+            if(price<0){
+
+                $('#updateProductModal .modal-body #price-field').addClass('is-invalid');
+                let error='<span class="badge rounded-pill text-bg-danger my-4 mx-2"></span>';
+
+                validation=false;
+
+            }
+
+            if(name.toString()===''){
+
+                $('#updateProductModal .modal-body #description-field').addClass('is-invalid');
+
+                validation=false;
+
+            }
+
+            return validation;
+            
+            
+        }
                 
-        $('#addProductModal .modal-body #price-field').removeClass('is-invalid');
-        $('#addProductModal .modal-body #description-field').removeClass('is-invalid');
-        
-        validation=true;
-        
-        let regex=/^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)$/;
-        
-        if(price.toString()===''){
-            
-            $('#addProductModal .modal-body #price-field').addClass('is-invalid');
-            
-            validation=false;
-        }
-        
-        if(price.toString().match(regex)===null){
-            
-            $('#addProductModal .modal-body #price-field').addClass('is-invalid');
-            
-            validation=false;
-            
-        }
-        
-        if(price<0){
-            
-            $('#addProductModal .modal-body #price-field').addClass('is-invalid');
-            let error='<span class="badge rounded-pill text-bg-danger my-4 mx-2"></span>';
-            
-            validation=false;
-            
-        }
-        
-        if(name.toString()===''){
-            
-            $('#addProductModal .modal-body #description-field').addClass('is-invalid');
-            
-            validation=false;
-            
-        }
-        
-        return validation;
-  
     }
         
 </script>
