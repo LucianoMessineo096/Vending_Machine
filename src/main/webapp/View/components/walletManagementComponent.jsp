@@ -153,7 +153,7 @@
     
     function showMovements(userId){
 
-        const url = "/SmartVendingMachine/UsersManagement/Wallet/getRecharges";
+        const url = "/SmartVendingMachine/UsersManagement/Wallet/getMovements";
 
         const data={
 

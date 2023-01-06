@@ -78,6 +78,36 @@ public class MachineServices {
         return machines;
     }
     
+    public String getStatus(int machineId) throws SQLException{
+    
+        String status;
+        Machine machine = new Machine();
+        String statement = "SELECT * FROM machines WHERE id=?";
+        
+        DataSourceFactory dataSource = new DataSourceFactory();
+        Connection connection = dataSource.getConnection();
+        
+        PreparedStatement query = connection.prepareStatement(statement);
+        query.setInt(1,machineId);
+        
+        ResultSet resultSet = query.executeQuery();
+        
+        if(resultSet.next()){
+        
+            machine.setStatus(resultSet.getNString("status"));
+        }
+        
+        status=machine.getStatus();
+        
+        query.close();
+        resultSet.close();
+        connection.close();
+        
+        return status;
+    
+    
+    }
+    
     public Machine getMachine(int machineId) throws SQLException{
     
         Machine machine = new Machine();

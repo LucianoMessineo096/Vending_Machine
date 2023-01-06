@@ -17,13 +17,10 @@
         
     </head>
     <body>
-        
-        
+         
         <h2 class="m-3">GENERIC ERROR: Si e' riscontrato un problema con la richiesta</h2>
-        
-        <div><img class="m-3" src="/SmartVendingMachine/View/img/genericError.gif"></div>
-        
-        <a class="btn btn-primary" href="/SmartVendingMachine">Ritorna alla home</a>
+       
+        <a class="btn btn-primary m-2" href="/SmartVendingMachine">Ritorna alla home</a>
         
     </body>
 </html>

@@ -120,7 +120,11 @@ public class ProductsFilter implements Filter {
         }
         else{
   
-            chain.doFilter(request, response);
+            String headerValue = req.getHeader("x-requested-with");
+            
+            if(headerValue!=null){
+                chain.doFilter(request, response);
+            }
   
         }
     }

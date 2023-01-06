@@ -49,7 +49,7 @@ import org.json.JSONObject;
                                                      "/UsersManagement/updatePersonalData",
                                                      "/UsersManagement/getAllUsers",
                                                      "/UsersManagement/Wallet/getWallet",
-                                                     "/UsersManagement/Wallet/getRecharges",
+                                                     "/UsersManagement/Wallet/getMovements",
                                                      "/UsersManagement/Wallet/updateBalance"})
 public class UsersManagement extends HttpServlet {
 
@@ -497,7 +497,7 @@ public class UsersManagement extends HttpServlet {
             }
                 break;
 
-            case "/SmartVendingMachine/UsersManagement/Wallet/getRecharges":
+            case "/SmartVendingMachine/UsersManagement/Wallet/getMovements":
                 
             {
                 try {

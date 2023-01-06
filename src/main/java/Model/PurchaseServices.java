@@ -49,7 +49,7 @@ public class PurchaseServices {
         
         ArrayList<Purchase> purchases = new ArrayList<>();
         
-        String getPurchasesQuery = "SELECT * FROM purchases WHERE userId=?";
+        String getPurchasesQuery = "SELECT * FROM purchases WHERE userId=? ORDER BY id DESC";
         
         DataSourceFactory dataSource = new DataSourceFactory();
         Connection connection = dataSource.getConnection();

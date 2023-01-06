@@ -186,13 +186,9 @@
             $.post(url,data,(response)=>{
                 
                 $('#purchaseModalMessage').text(response.message)
-                
-                console.log(response);
-                
+                                
                 getMachineProducts();
-                
-                
- 
+
             });
                     
         }

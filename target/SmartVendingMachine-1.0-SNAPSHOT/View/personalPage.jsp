@@ -51,7 +51,7 @@
                 <div id="machineConnectionSection"> 
                     
                     <div id="machineConnectionBody" class="row d-flex flex-row justify-content-center"></div>
-                    
+
                 </div>
    
                 <jsp:include page="/View/components/walletManagementComponent.jsp"></jsp:include>
@@ -111,15 +111,20 @@
             $('body').on('click','#machineConnectionBtn',(e)=>{
                 
                 const url="/SmartVendingMachine/MachinesManagement/connect";
-                
+                $('#connectionMessage').remove();
                 let parents = $(e.currentTarget).parents();
                 let machineId= parseInt(parents[3].id);
                 const data = {machineId: machineId};
 
                 $.post(url,data,(response)=>{
-                                        
-                    window.location=response.address;
+                    
+                    const alert='<div id="connectionMessage" class="alert alert-danger position-fixed bottom-0 end-0 m-2" role="alert">'+response.message+'</div>';
+                    
+                    response.success===true ? window.location=response.address : $('body').append(alert);
+
                 });
+                
+                setTimeout(()=>{$('#connectionMessage').remove();}, 3000);
 
             });
             

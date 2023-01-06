@@ -124,10 +124,24 @@ public class UsersFilter implements Filter {
                     
             }
         } else {
-            res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
-            res.setHeader("Pragma", "no-cache"); // HTTP 1.0.
-            res.setDateHeader("Expires", 0);
-            chain.doFilter(request, response);
+            
+            if(uri.endsWith("personalPage")){
+                
+                chain.doFilter(request, response);
+            }
+            else{
+                
+                String headerValue = req.getHeader("x-requested-with");
+                
+                if(headerValue!=null){
+                    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+                    res.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+                    res.setDateHeader("Expires", 0);
+                    chain.doFilter(request, response);
+                }
+
+            }
+
         }
     }
 

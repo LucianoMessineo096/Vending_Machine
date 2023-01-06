@@ -9,6 +9,8 @@ import Model.MachineServices;
 import Model.Product;
 import Model.ProductServices;
 import Model.User;
+import Utils.RequestUtils;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -16,6 +18,9 @@ import static java.lang.Float.parseFloat;
 import static java.lang.Integer.parseInt;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -41,6 +46,22 @@ import org.json.JSONObject;
 public class MachinesManagement extends HttpServlet {
     
     /*************************************************************************/
+    
+    protected boolean checkIfIsOccupied(int machineId) throws SQLException{
+        
+        MachineServices machineServices = new MachineServices();
+        String status=machineServices.getStatus(machineId);
+                
+        if(status.matches("occupied")){
+            
+            return true;
+        }
+        else{
+            return false;
+        }
+            
+    }
+    
     protected void connect(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, SQLException, IOException{
     
         JSONObject Jlocation = new JSONObject();
@@ -48,19 +69,39 @@ public class MachinesManagement extends HttpServlet {
                 
         request.setCharacterEncoding("UTF-8");
         int machineId = parseInt(request.getParameter("machineId"));
-
-        Machine machine = machineServices.getMachine(machineId);
-        machineServices.changeStatus(machineId,"occupied");
-
-        HttpSession session = request.getSession(false);
-        session.setAttribute("currentSessionMachine",machine);
         
-        Jlocation.put("success", true);
-        Jlocation.put("address", "/SmartVendingMachine/PurchasesManagement");
-        String location = Jlocation.toString();
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(location);
+        boolean occupied=checkIfIsOccupied(machineId);
+        
+        System.out.println("occupied: "+ occupied);
+        
+        if(occupied==false){
+            
+            Machine machine = machineServices.getMachine(machineId);
+            machineServices.changeStatus(machineId,"occupied");
+
+            HttpSession session = request.getSession(false);
+            session.setAttribute("currentSessionMachine",machine);
+
+            Jlocation.put("success", true);
+            Jlocation.put("address", "/SmartVendingMachine/PurchasesManagement");
+            String location = Jlocation.toString();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(location);
+        
+        }
+        else{
+            
+            Jlocation.put("success", false);
+            Jlocation.put("message", "la macchinetta e' gia occupata, si prega di selezionarne una libera");
+            String location = Jlocation.toString();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(location);
+        
+        }
+
+        
     
     }
     
@@ -293,7 +334,7 @@ public class MachinesManagement extends HttpServlet {
             throws ServletException, IOException, UnsupportedEncodingException {
         
         String uri = request.getRequestURI();
-        
+
         switch(uri){
         
             case "/SmartVendingMachine/MachinesManagement/getAll":

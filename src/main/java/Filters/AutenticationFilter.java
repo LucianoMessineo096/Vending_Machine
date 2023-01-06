@@ -107,6 +107,7 @@ public class AutenticationFilter implements Filter {
         String uri = req.getRequestURI();
         
         if(session == null || (session.getAttribute("currentSessionUser") == null)) {
+            
             if(uri.endsWith("registration") || uri.endsWith("login")){
                 res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
                 res.setHeader("Pragma", "no-cache"); // HTTP 1.0.
@@ -115,7 +116,9 @@ public class AutenticationFilter implements Filter {
             }
 
         } else {
+
             res.sendRedirect("/UsersManagement/personalPage");
+            
         }
         
         

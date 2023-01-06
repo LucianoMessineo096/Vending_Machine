@@ -48,7 +48,7 @@ public class MovementServices {
     
         ArrayList<Movement> movements = new ArrayList<>();
     
-        String statement = "SELECT * FROM movements WHERE userId=?";
+        String statement = "SELECT * FROM movements WHERE userId=? ORDER BY id DESC";
 
         DataSourceFactory dataSource = new DataSourceFactory();
         Connection connection = dataSource.getConnection();

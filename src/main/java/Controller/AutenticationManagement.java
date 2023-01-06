@@ -9,6 +9,7 @@ import Model.MachineServices;
 import Model.User;
 import Model.UserServices;
 import Security.PasswordEncryption;
+import Utils.RequestUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -164,7 +165,7 @@ public class AutenticationManagement extends HttpServlet {
             throws ServletException, IOException, UnsupportedEncodingException {
         
         String uri = request.getRequestURI();
-        
+      
         switch(uri){
          
             case "/SmartVendingMachine/AutenticationManagement":

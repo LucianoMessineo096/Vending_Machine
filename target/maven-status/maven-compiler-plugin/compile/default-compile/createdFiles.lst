@@ -9,6 +9,8 @@ Controller\PurchasesManagement.class
 Controller\RefillsManagement.class
 Controller\UsersManagement.class
 Filters\MachinesFilter.class
+Filters\RefillsFilter.class
+Utils\RequestUtils.class
 Model\Movement.class
 Model\MovementServices.class
 Model\Product.class
