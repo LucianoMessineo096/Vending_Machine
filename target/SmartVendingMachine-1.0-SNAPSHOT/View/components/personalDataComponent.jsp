@@ -85,6 +85,14 @@
 
             deleteAccount();
         });
+        
+        $(document).on('show.bs.modal','#updateUsrModal', function () {
+            
+            $("#newName").val('<%=currentUser.getName()%>');
+            $("#newSurname").val('<%=currentUser.getSurname()%>');
+            $("#newEmail").val('<%=currentUser.getEmail()%>');
+            
+        })
 
     });
     

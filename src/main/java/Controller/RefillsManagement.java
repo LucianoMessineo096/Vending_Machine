@@ -75,7 +75,7 @@ public class RefillsManagement extends HttpServlet {
     }
     
     protected ArrayList<Integer> updateQuantity(Refill refill,Integer[] insertedQuantities){
-        
+       
        HashMap<String,Integer> quantities = new HashMap<String,Integer>();
        ArrayList<Integer> newQuantities=new ArrayList<>();
        
@@ -87,26 +87,22 @@ public class RefillsManagement extends HttpServlet {
        quantities.put("prod4Quantity", refill.getProd4Quantity());
        
        for(HashMap.Entry<String,Integer> quantity : quantities.entrySet()){
-           
+                      
            int actualQuantity = quantity.getValue();
-           int insertedQuantity = insertedQuantities[count];
-       
-           if(actualQuantity<insertedQuantity){
-               
-               int toAdd= insertedQuantity - actualQuantity;
-               int newQuantity = actualQuantity + toAdd;
-               newQuantities.add(newQuantity);
+           int insertedQuantity = insertedQuantities[count];  
+           int toAdd=Math.abs(insertedQuantity-actualQuantity);
            
-           }
-           else if(actualQuantity>insertedQuantity){
-               int toAdd= actualQuantity - insertedQuantity;
-               int newQuantity = actualQuantity + toAdd;
-               newQuantities.add(newQuantity);
+           if(toAdd==0){
+              newQuantities.add(actualQuantity); 
            }
            else{
+               
+               int newQuantity=actualQuantity+toAdd;
+               newQuantities.add(newQuantity);
            
-               newQuantities.add(insertedQuantity);
            }
+           
+           count++;
            
        }
        

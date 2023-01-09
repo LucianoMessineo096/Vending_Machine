@@ -125,6 +125,11 @@ public class ProductsFilter implements Filter {
             if(headerValue!=null){
                 chain.doFilter(request, response);
             }
+            else{
+                
+                res.sendRedirect("/SmartVendingMachine/UsersManagement/personalPage");
+                
+            }
   
         }
     }

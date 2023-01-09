@@ -29,7 +29,7 @@
     <body>
         
         <jsp:include page="/View/components/navbar3.jsp"></jsp:include>
-        
+        <span class="badge rounded-pill text-bg-info m-2 position-absolute top-0 end-0">Saldo Attuale: €<b id="balanceInfo"></b></span>
         <section id="products" class="row d-flex flex-row justify-content-center">
             
         </section>
@@ -124,9 +124,24 @@
             return cardImg;
             
         }
+        
+        function getWalletBalance(){
+            
+            const url='/SmartVendingMachine/UsersManagement/Wallet/getWallet';
+            <% User currentSessionUser = (User)session.getAttribute("currentSessionUser"); %>
+            const data={userId:<%= currentSessionUser.getId() %>};
+                
+            $.get(url,data,(response)=>{
+                                
+                $('#balanceInfo').text(response.walletBalance);
+            });
+                
+        }
 
         function getMachineProducts(){
-
+            
+            getWalletBalance();
+            
             const url ='/SmartVendingMachine/ProductsManagement/getMachineProducts';
             <% Machine currentMachine = (Machine)session.getAttribute("currentSessionMachine"); %>
             const data={machineId:<%= currentMachine.getId() %>};

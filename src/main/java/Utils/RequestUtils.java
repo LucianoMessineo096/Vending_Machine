@@ -6,7 +6,10 @@ package Utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -31,6 +34,26 @@ public class RequestUtils {
         while ((line = reader.readLine()) != null) {
             System.out.println(line);
         }
+    }
+    
+    public int getParameters(HttpServletRequest request,String parameterName) throws IOException{
+        
+        HashMap<String,Integer> parameters = new HashMap<>();
+        
+        BufferedReader reader = request.getReader();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            System.out.println(line);
+            
+            String[] params = line.split("=");
+            parameters.put(params[0], Integer.parseInt(params[1]));
+        }
+        
+        
+        int paramValue=parameters.get(parameterName);
+        
+        return paramValue;
+
     }
      
 }

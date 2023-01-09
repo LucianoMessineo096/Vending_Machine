@@ -110,10 +110,12 @@
             
             $('body').on('click','#machineConnectionBtn',(e)=>{
                 
-                const url="/SmartVendingMachine/MachinesManagement/connect";
                 $('#connectionMessage').remove();
+                
+                const url="/SmartVendingMachine/MachinesManagement/connect";
+                
                 let parents = $(e.currentTarget).parents();
-                let machineId= parseInt(parents[3].id);
+                let machineId= parents[3].id;
                 const data = {machineId: machineId};
 
                 $.post(url,data,(response)=>{

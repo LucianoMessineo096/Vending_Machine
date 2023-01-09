@@ -62,18 +62,18 @@ public class MachinesManagement extends HttpServlet {
             
     }
     
-    protected void connect(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, SQLException, IOException{
-    
+    protected void connect(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, SQLException, IOException,NumberFormatException{
+        
         JSONObject Jlocation = new JSONObject();
         MachineServices machineServices = new MachineServices();
                 
         request.setCharacterEncoding("UTF-8");
-        int machineId = parseInt(request.getParameter("machineId"));
+        /*RequestUtils ru = new RequestUtils();
+        int machineId=ru.getParameters(request, "machineId");*/
+        int machineId = Integer.parseInt(request.getParameter("machineId"));
         
         boolean occupied=checkIfIsOccupied(machineId);
-        
-        System.out.println("occupied: "+ occupied);
-        
+                
         if(occupied==false){
             
             Machine machine = machineServices.getMachine(machineId);

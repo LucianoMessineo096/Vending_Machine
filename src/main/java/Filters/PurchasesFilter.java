@@ -79,7 +79,6 @@ public class PurchasesFilter implements Filter {
 	    String name = (String)en.nextElement();
 	    Object value = request.getAttribute(name);
 	    log("attribute: " + name + "=" + value.toString());
-
 	}
          */
         // For example, a filter might append something to the response.
@@ -107,34 +106,21 @@ public class PurchasesFilter implements Filter {
         HttpSession session = req.getSession(false);
         String uri = req.getRequestURI();
         
-        if(uri.endsWith("getAllPurchases")){
-        
+        if(session == null || session.getAttribute("currentSessionUser") == null) {
+            if(uri.endsWith("doPurchase") || uri.contains("getAllPurchases")) {
+
+                    res.sendRedirect("/SmartVendingMachine/index.jsp");
+
+            } 
+        } else {
+       
             res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
             res.setHeader("Pragma", "no-cache"); // HTTP 1.0.
             res.setDateHeader("Expires", 0);
             chain.doFilter(request, response);
-
+            
         }
-        else{
         
-            if(session == null || session.getAttribute("currentSessionUser") == null || session.getAttribute("currentSessionMachine")==null) {
-                if(uri.endsWith("doPurchase")) {
-
-                        res.sendRedirect("/SmartVendingMachine/index.jsp");
-
-                } else {
-
-                        res.sendRedirect("/SmartVendingMachine/index.jsp");
-
-                }
-            } else {
-                res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
-                res.setHeader("Pragma", "no-cache"); // HTTP 1.0.
-                res.setDateHeader("Expires", 0);
-                chain.doFilter(request, response);
-            }
-        
-        }
 
     }
 
