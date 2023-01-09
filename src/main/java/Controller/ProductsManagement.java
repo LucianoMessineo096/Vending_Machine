@@ -10,6 +10,7 @@ import Model.Product;
 import Model.ProductServices;
 import Model.Refill;
 import Model.RefillServices;
+import Utils.ProductsUtils;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import static java.lang.Float.parseFloat;
@@ -40,8 +41,6 @@ import org.json.JSONObject;
                                                         "/ProductsManagement/updateProduct"})
 public class ProductsManagement extends HttpServlet {
     
-    //------------------Utils Function-----------------------------------//
-    
     protected void getMachineProducts(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, SQLException, IOException{
         
         RefillServices refillServices = new RefillServices();
@@ -58,29 +57,45 @@ public class ProductsManagement extends HttpServlet {
         Product prod4 = productServices.getProduct(refill.getProd4Id());
         
         ArrayList<Product> products = new ArrayList<>();
-        products.add(prod1);
-        products.add(prod2);
-        products.add(prod3);
-        products.add(prod4);
         
-        HashMap<String,Integer> prodQuantity = new HashMap<>();
-        prodQuantity.put("prod1Id", refill.getProd1Id());
-        prodQuantity.put("prod1Quantity", refill.getProd1Quantity());
-        prodQuantity.put("prod2Id", refill.getProd2Id());
-        prodQuantity.put("prod2Quantity", refill.getProd2Quantity());
-        prodQuantity.put("prod3Id", refill.getProd3Id());
-        prodQuantity.put("prod3Quantity", refill.getProd3Quantity());
-        prodQuantity.put("prod4Id", refill.getProd4Id());
-        prodQuantity.put("prod4Quantity", refill.getProd4Quantity());
+        if(products!=null){
+            
+            products.add(prod1);
+            products.add(prod2);
+            products.add(prod3);
+            products.add(prod4);
 
-        Jlocation.put("success", true);
-        Jlocation.put("products", products);
-        Jlocation.put("quantities", prodQuantity);
-        Jlocation.put("message", "prodotti ottenuti");
-        String location = Jlocation.toString();
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(location);
+            HashMap<String,Integer> prodQuantity = new HashMap<>();
+            prodQuantity.put("prod1Id", refill.getProd1Id());
+            prodQuantity.put("prod1Quantity", refill.getProd1Quantity());
+            prodQuantity.put("prod2Id", refill.getProd2Id());
+            prodQuantity.put("prod2Quantity", refill.getProd2Quantity());
+            prodQuantity.put("prod3Id", refill.getProd3Id());
+            prodQuantity.put("prod3Quantity", refill.getProd3Quantity());
+            prodQuantity.put("prod4Id", refill.getProd4Id());
+            prodQuantity.put("prod4Quantity", refill.getProd4Quantity());
+
+            Jlocation.put("success", true);
+            Jlocation.put("products", products);
+            Jlocation.put("quantities", prodQuantity);
+            Jlocation.put("message", "prodotti ottenuti");
+            String location = Jlocation.toString();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(location);
+        
+        }
+        else{
+            
+            Jlocation.put("success", false);
+            Jlocation.put("message", "prodotti non ottenuti");
+            String location = Jlocation.toString();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(location);
+        
+        }
+        
     
     }
     
@@ -140,53 +155,34 @@ public class ProductsManagement extends HttpServlet {
         
         ArrayList<Product> products = productServices.getAllProducts();
         
-        Jlocation.put("success", true);
-        Jlocation.put("products", products);
-        Jlocation.put("message", "prodotti ottenuti");
-        String location = Jlocation.toString();
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(location);
-    
-    }
-    
-    protected HashMap<Refill,Integer> getProductColumnsIndex(ArrayList<Refill> refills,int productId) throws IllegalArgumentException, IllegalAccessException{
+        if(products!=null){
+            
+            Jlocation.put("success", true);
+            Jlocation.put("products", products);
+            Jlocation.put("message", "prodotti ottenuti");
+            String location = Jlocation.toString();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(location);
         
-        //description : this function return an HashMap that contain the column index
-        //              of the product for a specified refill
+        }
+        else{
         
-        HashMap<Refill,Integer> columnsIndex = new HashMap<>();
+            Jlocation.put("success", false);
+            Jlocation.put("message", "prodotti non ottenuti");
+            String location = Jlocation.toString();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(location);
         
-        for(Refill refill : refills){
-            
-            if(refill.getProd1Id()==productId){
-                
-                columnsIndex.put(refill, 1);
-            
-            }else if(refill.getProd2Id()==productId){
-                
-                columnsIndex.put(refill, 2);
-            
-            }else if(refill.getProd3Id()==productId){
-                
-                columnsIndex.put(refill, 3);
-            
-            }else if(refill.getProd4Id()==productId){
-                
-                columnsIndex.put(refill, 4);
-            
-            }else{
-            
-            }
-
         }
         
-        return columnsIndex;
-
+    
     }
     
     protected void deleteProduct(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, SQLException, IOException, IllegalArgumentException, IllegalAccessException{
         
+        ProductsUtils utils = new ProductsUtils();
         ProductServices productServices = new ProductServices();
         RefillServices refillServices = new RefillServices();
         MachineServices machineServices = new MachineServices();
@@ -196,7 +192,7 @@ public class ProductsManagement extends HttpServlet {
         int productId = parseInt(request.getParameter("productId"));
         
         ArrayList<Refill> refills = refillServices.getAllRefills();
-        HashMap<Refill,Integer> columnsIndex = getProductColumnsIndex(refills,productId);
+        HashMap<Refill,Integer> columnsIndex = utils.getProductColumnsIndex(refills, productId);
         
         for(HashMap.Entry<Refill,Integer> refill : columnsIndex.entrySet()){
                         
@@ -211,8 +207,8 @@ public class ProductsManagement extends HttpServlet {
             machineServices.updateMachine(refill.getKey().getMachId(), newActualCapacity);
 
         }
-        boolean deleted = productServices.deleteProduct(productId);
         
+        boolean deleted = productServices.deleteProduct(productId);
         
         if(deleted){
         
@@ -305,7 +301,7 @@ public class ProductsManagement extends HttpServlet {
         }
     }
     
-    //----------------Main Function-----------------------------------//
+    //-------------------------------------------------------------------------
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

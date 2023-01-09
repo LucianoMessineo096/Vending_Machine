@@ -9,6 +9,7 @@ import Model.MachineServices;
 import Model.Product;
 import Model.ProductServices;
 import Model.User;
+import Utils.MachinesUtils;
 import Utils.RequestUtils;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -45,34 +46,18 @@ import org.json.JSONObject;
                                                         "/MachinesManagement/connect"})
 public class MachinesManagement extends HttpServlet {
     
-    /*************************************************************************/
-    
-    protected boolean checkIfIsOccupied(int machineId) throws SQLException{
-        
-        MachineServices machineServices = new MachineServices();
-        String status=machineServices.getStatus(machineId);
-                
-        if(status.matches("occupied")){
-            
-            return true;
-        }
-        else{
-            return false;
-        }
-            
-    }
-    
     protected void connect(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, SQLException, IOException,NumberFormatException{
         
         JSONObject Jlocation = new JSONObject();
         MachineServices machineServices = new MachineServices();
-                
+        MachinesUtils utils = new MachinesUtils();
+        
         request.setCharacterEncoding("UTF-8");
         /*RequestUtils ru = new RequestUtils();
         int machineId=ru.getParameters(request, "machineId");*/
         int machineId = Integer.parseInt(request.getParameter("machineId"));
         
-        boolean occupied=checkIfIsOccupied(machineId);
+        boolean occupied=utils.checkIfIsOccupied(machineId);
                 
         if(occupied==false){
             
@@ -105,31 +90,15 @@ public class MachinesManagement extends HttpServlet {
     
     }
     
-    protected void checkMachinesCapacity(ArrayList<Machine> machines) throws SQLException{
-    
-        //looping through machines and check if machine capacity is eq 0
-        //if eq 0 then set status=disabled 
-        
-        MachineServices machineServices = new MachineServices();
-        
-        for(Machine machine : machines){
-            
-            if(machine.getActualCapacity()==0){
-            
-                machineServices.changeStatus(machine.getId(),"disabled");
-            }
-        }
-    
-    }
-    
     protected void getAllMachines(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException{
         
+        MachinesUtils utils = new MachinesUtils();
         MachineServices machineServices = new MachineServices();
         JSONObject Jlocation = new JSONObject();
         
         ArrayList<Machine> machines = machineServices.getMachines();
    
-        checkMachinesCapacity(machines);
+        utils.checkMachinesCapacity(machines);
         
         machines= machineServices.getMachines();
         
@@ -327,7 +296,7 @@ public class MachinesManagement extends HttpServlet {
 
     }
     
-    /*************************************************************************/
+    //-------------------------------------------------------------------------
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

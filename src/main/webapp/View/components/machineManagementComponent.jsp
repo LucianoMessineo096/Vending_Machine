@@ -404,11 +404,12 @@
                                                 '<i class="bi bi-pencil"></i>'+
                                             '</button>';
                                     
+                    let status = machine.status==='disabled'? '<span class="badge text-bg-danger">'+machine.status+'</span>' : ( machine.status==='occupied'? '<span class="badge text-bg-warning">'+machine.status+'</span>' : '<span class="badge text-bg-success">'+machine.status+'</span>' );              
                     let updateBtn = machine.actualCapacity===0 ? updateBtnDisabled : updateBtnEnabled;                
                     
                     let record = '<tr id='+machine.id.toString()+'>'+'<td>'+machine.id.toString()+'</td>'+
                                  '<td>'+machine.name.toString()+'</td>'+
-                                 '<td>'+machine.status.toString()+'</td>'+
+                                 '<td>'+status+'</td>'+
                                  '<td>'+machine.maxCapacity.toString()+'</td>'+
                                  '<td>'+machine.actualCapacity.toString()+'</td>'+
                                  '<td>'+

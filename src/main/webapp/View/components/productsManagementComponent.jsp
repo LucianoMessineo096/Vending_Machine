@@ -282,8 +282,6 @@
         };
         
         $.post(url,data,(response)=>{
-
-            alert(response.message);
             
             showAllProducts();
         });

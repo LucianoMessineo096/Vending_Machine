@@ -2,7 +2,9 @@ Filters\ProductsFilter.class
 Controller\ProductsManagement.class
 Controller\AutenticationManagement.class
 Model\MachineServices.class
+Utils\ProductsUtils.class
 Model\UserServices.class
+Utils\PurchasesUtils.class
 Model\Purchase.class
 Model\DataSourceFactory.class
 Controller\PurchasesManagement.class
@@ -12,6 +14,7 @@ Filters\MachinesFilter.class
 Filters\RefillsFilter.class
 Utils\RequestUtils.class
 Model\Movement.class
+Utils\MachinesUtils.class
 Model\MovementServices.class
 Model\Product.class
 Model\ProductServices.class
@@ -22,6 +25,7 @@ Model\Machine.class
 Controller\MachinesManagement.class
 Filters\PurchasesFilter.class
 Model\PurchaseServices.class
+Utils\RefillsUtils.class
 Model\User.class
 Filters\UsersFilter.class
 Security\PasswordEncryption.class

@@ -53,8 +53,6 @@ import org.json.JSONObject;
                                                      "/UsersManagement/Wallet/updateBalance"})
 public class UsersManagement extends HttpServlet {
 
-   //--------------Utils Functions------------------------//
-    
     protected void updatePersonalData(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, SQLException, IOException, NoSuchAlgorithmException{
     
         UserServices userServices = new UserServices();

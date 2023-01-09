@@ -15,6 +15,7 @@ import Model.Refill;
 import Model.RefillServices;
 import Model.User;
 import Model.UserServices;
+import Utils.PurchasesUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -44,145 +45,9 @@ import org.json.JSONObject;
                                                          "/PurchasesManagement/getAllPurchases"})
 public class PurchasesManagement extends HttpServlet {
     
-    
-    //--------Utils---------------------------//
-    
-    protected boolean checkQuantity(Product product,Refill refill,Machine machine){
-        
-        boolean check=true;
-        
-        HashMap<Integer,Integer> machineProducts = new HashMap<Integer,Integer>();
-        
-        if(refill.getProd1Id()!=0){
-            machineProducts.put(refill.getProd1Id(),refill.getProd1Quantity());
-        }
-        
-        if(refill.getProd2Id()!=0){
-            
-            machineProducts.put(refill.getProd2Id(),refill.getProd2Quantity());
-        }
-        
-        if(refill.getProd3Id()!=0){
-            
-            machineProducts.put(refill.getProd3Id(),refill.getProd3Quantity());
-        }
-        
-        if(refill.getProd4Id()!=0){
-            
-            machineProducts.put(refill.getProd4Id(),refill.getProd4Quantity());
-        
-        }
-
-        for(HashMap.Entry<Integer,Integer> prod : machineProducts.entrySet()){
-           
-            if(prod.getKey()==product.getId()){
-
-                if(prod.getValue()==0){
-                    
-                    check=false;
-                
-                } 
-            }
-
-        }
-    
-        return check;
-    }
-    
-    protected void updateRefillQuantity(Product product,Refill refill){
-    
-        if(refill.getProd1Id()==product.getId()){
-            
-            refill.setProd1Quantity(refill.getProd1Quantity()-1);
-        }
-        
-        if(refill.getProd2Id()==product.getId()){
-            
-            refill.setProd2Quantity(refill.getProd2Quantity()-1);
-        }
-        
-        if(refill.getProd3Id()==product.getId()){
-            
-            refill.setProd3Quantity(refill.getProd3Quantity()-1);
-        }
-        
-        if(refill.getProd4Id()==product.getId()){
-            
-            refill.setProd4Quantity(refill.getProd4Quantity()-1);
-        }
-
-    }
-    
-    protected int calculateNewCapacity(Machine machine){
-    
-        machine.setActualCapacity(machine.getActualCapacity()-1);
-        
-        return machine.getActualCapacity();
-        
-    
-    }
-    
-    protected int getProductColumnIndex(Refill refill,Product product) throws IllegalArgumentException, IllegalAccessException{
-        
-        //description : this function return an HashMap that contain the column index
-        //              of the product for a specified refill
-        
-        int columnIndex=0;
-        
-        if(refill.getProd1Id()==product.getId()){
-
-            columnIndex=1;
-
-        }else if(refill.getProd2Id()==product.getId()){
-
-            columnIndex=2;
-            
-        }else if(refill.getProd3Id()==product.getId()){
-
-            columnIndex=3;
-
-        }else if(refill.getProd4Id()==product.getId()){
-
-            columnIndex=4;
-
-        }else{
-
-        }
-
-        return columnIndex;
-
-    }
-
-    protected int getNewQuantity(Refill refill,Product product){
-        
-        int newQuantity=0;
-        
-        if(refill.getProd1Id()==product.getId()){
-            
-            newQuantity=refill.getProd1Quantity();
-        }
-        
-        if(refill.getProd2Id()==product.getId()){
-            
-            newQuantity=refill.getProd2Quantity();
-        }
-        
-        if(refill.getProd3Id()==product.getId()){
-            
-            newQuantity=refill.getProd3Quantity();
-        }
-        
-        if(refill.getProd4Id()==product.getId()){
-            
-            newQuantity=refill.getProd4Quantity();
-        }
-        
-        return newQuantity;
-    
-    }
-    
     protected void doPurchase(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, IOException, SQLException, IllegalArgumentException, IllegalAccessException{
-    
+        
+        PurchasesUtils utils = new PurchasesUtils();
         PurchaseServices purchaseService = new PurchaseServices();
         ProductServices productService = new ProductServices();
         UserServices userService = new UserServices();
@@ -201,7 +66,7 @@ public class PurchasesManagement extends HttpServlet {
         Machine machine = machineServices.getMachine(machineId);
         Refill refill = refillServices.getRefill(machineId);
         
-        boolean checked = checkQuantity(product,refill,machine);
+        boolean checked = utils.checkQuantity(product, refill, machine);
                 
         if(checked){
         
@@ -223,12 +88,12 @@ public class PurchasesManagement extends HttpServlet {
                     purchaseService.addPurchase(userId,productId,machineId,formattedDate,price);
                     movementServices.addMovement(userId, price, formattedDate, "purchase");
 
-                    updateRefillQuantity(product,refill);
-                    int productColumnIndex = getProductColumnIndex(refill,product);
-                    int newQuantity = getNewQuantity(refill,product);
+                    utils.updateRefillQuantity(product, refill);
+                    int productColumnIndex = utils.getProductColumnIndex(refill, product);
+                    int newQuantity = utils.getNewQuantity(refill, product);
                     boolean updated=refillServices.updateRefill(machineId,newQuantity,productColumnIndex);
                     
-                    int newActualCapacity =calculateNewCapacity(machine);
+                    int newActualCapacity =utils.calculateNewCapacity(machine);
                     machineServices.updateMachine(machineId, newActualCapacity);
 
                     Jlocation.put("success", true);
@@ -287,29 +152,44 @@ public class PurchasesManagement extends HttpServlet {
         int userId = parseInt(request.getParameter("userId"));
         
         ArrayList<Purchase> purchases = purchaseService.getPurchases(userId);
-        ArrayList<Product> products = new ArrayList<>();
         
-        for(Purchase purchase : purchases){
-           
-            Product product = productServices.getProduct(purchase.getProductId());
+        if(purchases!=null){
             
-            products.add(product);
+            ArrayList<Product> products = new ArrayList<>();
+        
+            for(Purchase purchase : purchases){
 
+                Product product = productServices.getProduct(purchase.getProductId());
+
+                products.add(product);
+
+            }
+
+            Jlocation.put("success", true);
+            Jlocation.put("purchases", purchases);
+            Jlocation.put("products", products);
+            Jlocation.put("message", "Acquisti ottenuti");
+            String location = Jlocation.toString();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(location);
+        
+        }
+        else{
+        
+            Jlocation.put("success", false);
+            Jlocation.put("message", "Acquisti non ottenuti");
+            String location = Jlocation.toString();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(location);
+        
         }
         
-        Jlocation.put("success", true);
-        Jlocation.put("purchases", purchases);
-        Jlocation.put("products", products);
-        Jlocation.put("message", "Acquisti ottenuti");
-        String location = Jlocation.toString();
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(location);
     
     }
     
-
-    //-------------Main-------------//
+    //--------------------------------------------------------------------------
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

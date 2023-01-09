@@ -8,6 +8,7 @@ import Model.Machine;
 import Model.MachineServices;
 import Model.Refill;
 import Model.RefillServices;
+import Utils.RefillsUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -32,7 +33,6 @@ import org.json.JSONObject;
 @WebServlet(name = "RefillsManagement", urlPatterns = {"/RefillsManagement","/RefillsManagement/addRefill","/RefillsManagement/getRefill","/RefillsManagement/getAll"})
 public class RefillsManagement extends HttpServlet {
     
-    /*************************************************************************/
     protected void getRefill(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, SQLException, IOException{
         
         RefillServices refillServices = new RefillServices();
@@ -74,44 +74,9 @@ public class RefillsManagement extends HttpServlet {
     
     }
     
-    protected ArrayList<Integer> updateQuantity(Refill refill,Integer[] insertedQuantities){
-       
-       HashMap<String,Integer> quantities = new HashMap<String,Integer>();
-       ArrayList<Integer> newQuantities=new ArrayList<>();
-       
-       int count=0;
-       
-       quantities.put("prod1Quantity", refill.getProd1Quantity());
-       quantities.put("prod2Quantity", refill.getProd2Quantity());
-       quantities.put("prod3Quantity", refill.getProd3Quantity());
-       quantities.put("prod4Quantity", refill.getProd4Quantity());
-       
-       for(HashMap.Entry<String,Integer> quantity : quantities.entrySet()){
-                      
-           int actualQuantity = quantity.getValue();
-           int insertedQuantity = insertedQuantities[count];  
-           int toAdd=Math.abs(insertedQuantity-actualQuantity);
-           
-           if(toAdd==0){
-              newQuantities.add(actualQuantity); 
-           }
-           else{
-               
-               int newQuantity=actualQuantity+toAdd;
-               newQuantities.add(newQuantity);
-           
-           }
-           
-           count++;
-           
-       }
-       
-       return newQuantities;
-
-    }
-   
     protected void addRefill(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, SQLException, IOException{
-    
+        
+        RefillsUtils utils = new RefillsUtils();
         RefillServices refillServices = new RefillServices();
         MachineServices machineServices = new MachineServices();
         JSONObject Jlocation = new JSONObject();
@@ -141,8 +106,7 @@ public class RefillsManagement extends HttpServlet {
             
             if(machineHasBeenRefilled){
             
-                ArrayList<Integer> newQuantities = updateQuantity(refill,insertedQuantities);
-            
+                ArrayList<Integer> newQuantities = utils.updateQuantity(refill, insertedQuantities);
                 prod1Quantity = newQuantities.get(0);
                 prod2Quantity = newQuantities.get(1);    
                 prod3Quantity = newQuantities.get(2);
@@ -232,7 +196,7 @@ public class RefillsManagement extends HttpServlet {
 
     }
 
-    /*************************************************************************/
+    //--------------------------------------------------------------------------
 
     
     @Override
