@@ -72,19 +72,19 @@
     <script>
 
         $(document).ready(()=>{
-            
+
             //-------------------Users management----------------------------//
-            
+
             '<%= currentUser.getType() %>' === 'admin' ? showAdminInterface() : '';
-            
+
             '<%= currentUser.getType() %>' === 'user' ? showUserInterface() : '';
-            
+
             '<%= currentUser.getType() %>' === 'tech' ? showTechInterface() : '';
 
             //---------PERSONAL INFO VIEW -----------//
 
             $("#personalData").click((e)=>{
-                
+
                 e.preventDefault();
                 showPersonalInfo();
 
@@ -93,7 +93,7 @@
             //--------WALLET VIEW --------//
 
             $('#wallet').click((e)=>{
-                
+
                 e.preventDefault();
                 showWallet();
 
@@ -102,81 +102,81 @@
             //--------Purchase-----------//
 
             $('#purchase').click((e)=>{
-                
+
                 e.preventDefault();
                 showMachinesCard();
-                
+
             });
-            
+
             $('body').on('click','#machineConnectionBtn',(e)=>{
-                
+
                 $('#connectionMessage').remove();
-                
+
                 const url="/SmartVendingMachine/MachinesManagement/connect";
-                
+
                 let parents = $(e.currentTarget).parents();
                 let machineId= parents[3].id;
                 const data = {machineId: machineId};
 
                 $.post(url,data,(response)=>{
-                    
+
                     const alert='<div id="connectionMessage" class="alert alert-danger position-fixed bottom-0 end-0 m-2" role="alert">'+response.message+'</div>';
-                    
+
                     response.success===true ? window.location=response.address : $('body').append(alert);
 
                 });
-                
+
                 setTimeout(()=>{$('#connectionMessage').remove();}, 3000);
 
             });
-            
+
             //---------Purchase History ----------//
 
             $('#purchasesMade').click((e)=>{
-                
+
                 e.preventDefault();
                 showPurchases();
 
             });
-            
+
             //-------------------Users Management(admin)---------------------//
-            
+
             $('#usersManagement').click((e)=>{
-                
+
                 e.preventDefault();
                 showAllUsers();
-                
+
             });
-            
+
             $('#updateUserSubmit').click(()=>{
-                
+
                 updateUser();
             });
-            
+
             //-------------------Products Management(admin/tech)------------------//
-            
+
             $('#productsManagement').click((e)=>{
-                
+
                 e.preventDefault();
                 showAllProducts();
-                
+
             });
-            
+
             //------------------Machine Management(admin)------------------------//
-        
+
             $('body').on('click','#machinesManagement',(e)=>{
-                
+
                 e.preventDefault();
                 showAllMachines();
 
             });
 
         });
-        
+
         //##################FUNCTIONS#########################################//
 
         //-------------USER DATA
-        
+
         function showPersonalInfo(){
 
             clearInterface();
@@ -192,41 +192,41 @@
                 }
             });
         }
-        
+
         //------------------PURCHASE
-        
+
         function checkMachinesAvailability(machines){
-        
+
             var machineAvailable=0;
-                    
+
             machines.forEach((machine,index)=>{
-                 
+
                 (machine.status!=='disabled' && machine.status!=='occupied') ? machineAvailable++ : machineAvailable;
 
 
             });
-            
+
             return check = machineAvailable>0 ? true : false;
-        
+
         }
 
         function showMachinesCard(){
-            
+
             $('.spinner-border').css('display','block');
             clearInterface();
-            
+
             const url="/SmartVendingMachine/MachinesManagement/getAll";
-            
+
             $.get(url,(response)=>{
-                                
+
                 if(response.success){
-                    
+
                     let checkAvailability= checkMachinesAvailability(response.machines);
-                                        
+
                     if(checkAvailability){
-                        
+
                         $('#machineConnectionBody').empty();
-                   
+
                         response.machines.forEach(machine=>{
 
                             if(machine.status==='active' || machine.status==='free'){
@@ -255,23 +255,23 @@
                        $('.spinner-border').css('display','none');
                     }
                     else{
-                    
+
                         $('#machineConnectionBody').empty();
                         $('#machineConnectionBody').append('<div class="alert alert-warning my-3" role="alert">Nessuna macchinetta al momento disponibile!</div>');
                         $('#machineConnectionSection').css('display','block');
                         $('.spinner-border').css('display','none');
                     }
- 
+
                 }
-                
+
             });
-           
+
         }
 
         //---------------UTILS
-        
+
         function showAdminInterface(){
-            
+
             $('#personalData').show();
             $('#wallet').show();
             $('#purchase').show();
@@ -280,9 +280,9 @@
             $('#machinesManagement').show();
             $('#productsManagement').show();
         }
-        
+
         function showTechInterface(){
-            
+
             $('#personalData').show();
             $('#wallet').show();
             $('#purchase').show();
@@ -291,9 +291,9 @@
             $('#machinesManagement').show();
             $('#productsManagement').show();
         }
-        
+
         function showUserInterface(){
-            
+
             $('#personalData').show();
             $('#wallet').show();
             $('#purchase').show();
@@ -302,9 +302,9 @@
             $('#machinesManagement').hide();
             $('#productsManagement').hide();
         }
-        
+
         function clearInterface(){
-            
+
             $('#wallet-div').css('display','none');
             $('#personal-data').css('display','none');
             $('#purchases').css('display','none');
@@ -313,11 +313,11 @@
             $('#machine-mngmt').css('display','none');
             $('#machineConnectionSection').css('display','none');
         }
-        
+
         function checkIfInputFieldIsBlank(data){
-            
+
             let formData = Object.values(data);
-            
+
             return formData.includes('');
         }
 

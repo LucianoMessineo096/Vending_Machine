@@ -107,17 +107,16 @@ public class PurchasesFilter implements Filter {
         String uri = req.getRequestURI();
         
         if(session == null || session.getAttribute("currentSessionUser") == null) {
-            if(uri.endsWith("doPurchase") || uri.contains("getAllPurchases")) {
+            if(uri.endsWith("doPurchase") || uri.contains("getAllPurchases") || uri.endsWith("PurchasesManagement")) {
 
                     res.sendRedirect("/SmartVendingMachine/index.jsp");
 
             } 
         } else {
-            
+
             chain.doFilter(request, response);
-            
+
         }
-        
 
     }
 

@@ -135,7 +135,9 @@
     $(document).ready(()=>{
 
         login();
-
+        
+        history.replaceState(null, null, location.href);
+        
     });
 
 
