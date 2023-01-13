@@ -417,33 +417,12 @@ public class UsersManagement extends HttpServlet {
             
             case "/SmartVendingMachine/UsersManagement":
                 
-                
                 request.getRequestDispatcher("index.jsp").forward(request, response);
                 break;
             
             case "/SmartVendingMachine/UsersManagement/personalPage":
                 
-                try{
-                    
-                    MachineServices machineServices = new MachineServices();
-        
-                    HttpSession session = request.getSession(false);
-                    Machine machine = (Machine) session.getAttribute("currentSessionMachine");
-
-                    if(machine!=null){
-
-                        int machineId = machine.getId();
-                        machineServices.changeStatus(machineId,"free");
-                        session.removeAttribute("currentSessionMachine");
-
-                    }
-
-                    request.getRequestDispatcher("/View/personalPage.jsp").forward(request, response);
-
-                }catch(SQLException e){
-                    
-                }
-                
+                request.getRequestDispatcher("/View/personalPage.jsp").forward(request, response);
                 
                 break;
   
