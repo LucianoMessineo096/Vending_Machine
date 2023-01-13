@@ -17,7 +17,10 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import static java.lang.Float.parseFloat;
 import static java.lang.Integer.parseInt;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -61,9 +64,9 @@ public class MachinesManagement extends HttpServlet {
                 
         if(occupied==false){
             
-            Machine machine = machineServices.getMachine(machineId);
             machineServices.changeStatus(machineId,"occupied");
-
+            Machine machine = machineServices.getMachine(machineId);
+            
             HttpSession session = request.getSession(false);
             session.setAttribute("currentSessionMachine",machine);
 
@@ -95,10 +98,10 @@ public class MachinesManagement extends HttpServlet {
         MachinesUtils utils = new MachinesUtils();
         MachineServices machineServices = new MachineServices();
         JSONObject Jlocation = new JSONObject();
-        
+
         ArrayList<Machine> machines = machineServices.getMachines();
    
-        utils.checkMachinesCapacity(machines);
+        utils.checkMachinesStatus();
         
         machines= machineServices.getMachines();
         
@@ -266,16 +269,45 @@ public class MachinesManagement extends HttpServlet {
     }
     
     protected void release(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, SQLException, IOException{
-    
+        
+        HttpSession session = request.getSession(false);
+        Machine machine = (Machine) session.getAttribute("currentSessionMachine");
         MachineServices machineServices = new MachineServices();
         JSONObject Jlocation = new JSONObject();
         
         request.setCharacterEncoding("UTF-8");
         int machineId = Integer.parseInt(request.getParameter("machineId"));
         
-        boolean changed = machineServices.changeStatus(machineId,"free");
+        String status = machineServices.getStatus(machineId);
         
-        if(changed){
+        if(!"disabled".equals(status)){
+                        
+            boolean changed = machineServices.changeStatus(machine.getId(),"free");
+        
+            if(changed){
+
+                Jlocation.put("success", true);
+                Jlocation.put("message", "macchinetta liberata");
+                String location = Jlocation.toString();
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(location);
+
+            }
+            else{
+                Jlocation.put("success", false);
+                Jlocation.put("message", "macchinetta non liberata");
+                String location = Jlocation.toString();
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(location);
+            }
+        
+        }else{
+            
+            System.out.println("RELEASE else");
+            
+            machineServices.changeStatus(machine.getId(),"disabled");
         
             Jlocation.put("success", true);
             Jlocation.put("message", "macchinetta liberata");
@@ -283,17 +315,10 @@ public class MachinesManagement extends HttpServlet {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write(location);
+        }
         
-        }
-        else{
-            Jlocation.put("success", false);
-            Jlocation.put("message", "macchinetta non liberata");
-            String location = Jlocation.toString();
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write(location);
-        }
-
+        session.removeAttribute("currentSessionMachine");
+        
     }
     
     //-------------------------------------------------------------------------
