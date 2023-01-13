@@ -85,19 +85,24 @@ public class AutenticationManagement extends HttpServlet {
         HttpSession session = request.getSession(false);
         Machine machine = (Machine) session.getAttribute("currentSessionMachine");
         
-        String status=machineServices.getStatus(machine.getId());
-        
-        if(!"disabled".equals(status)){
+        if(machine!=null){
             
-            int machineId = machine.getId();
-            machineServices.changeStatus(machineId,"free");
+            String status=machineServices.getStatus(machine.getId());
         
-        }else{
-            
-            int machineId = machine.getId();
-            machineServices.changeStatus(machineId,"disabled");
+            if(!"disabled".equals(status)){
+
+                int machineId = machine.getId();
+                machineServices.changeStatus(machineId,"free");
+
+            }else{
+
+                int machineId = machine.getId();
+                machineServices.changeStatus(machineId,"disabled");
+
+            }
         
         }
+        
 
         session.removeAttribute("currentSessionUser");
         session.removeAttribute("currentSessionMachine");
