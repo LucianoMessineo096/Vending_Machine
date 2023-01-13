@@ -15,18 +15,20 @@ public class Machine {
     private String status;
     private int maxCapacity;
     private int actualCapacity;
+    private String occupiedSince;
     
     public Machine(){
     
     
     }
 
-    public Machine(int id, String name, String status, int maxCapacity, int actualCapacity) {
+    public Machine(int id, String name, String status, int maxCapacity, int actualCapacity,String occupiedSince) {
         this.id = id;
         this.name = name;
         this.status = status;
         this.maxCapacity = maxCapacity;
         this.actualCapacity = actualCapacity;
+        this.occupiedSince=occupiedSince;
     }
     
 
@@ -98,6 +100,14 @@ public class Machine {
      */
     public void setActualCapacity(int actualCapacity) {
         this.actualCapacity = actualCapacity;
+    }
+
+    public String getOccupiedSince() {
+        return occupiedSince;
+    }
+
+    public void setOccupiedSince(String occupiedSince) {
+        this.occupiedSince = occupiedSince;
     }
     
 }
