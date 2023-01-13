@@ -82,14 +82,20 @@ public class AutenticationManagement extends HttpServlet {
     protected void logout(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, SQLException{
         
         MachineServices machineServices = new MachineServices();
-        
         HttpSession session = request.getSession(false);
         Machine machine = (Machine) session.getAttribute("currentSessionMachine");
         
-        if(machine!=null){
+        String status=machineServices.getStatus(machine.getId());
+        
+        if(!"disabled".equals(status)){
             
             int machineId = machine.getId();
             machineServices.changeStatus(machineId,"free");
+        
+        }else{
+            
+            int machineId = machine.getId();
+            machineServices.changeStatus(machineId,"disabled");
         
         }
 
