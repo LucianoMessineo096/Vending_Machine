@@ -16,31 +16,132 @@ import java.util.ArrayList;
  */
 public class MachineServices {
     
+    public boolean setToNullOccupiedSince(int machineId) throws SQLException{
+        
+        boolean setted=false;
+        
+        String statement = "UPDATE machines SET occupiedSince=null WHERE id=?";
+         
+        DataSourceFactory dataSource = new DataSourceFactory();
+        Connection connection = dataSource.getConnection();
+
+        PreparedStatement query = connection.prepareStatement(statement);
+        query.setInt(1,machineId);
+
+        int rowCount = query.executeUpdate();
+
+        if(rowCount!=0){
+
+            setted=true;
+
+        }
+
+        query.close();
+        connection.close();
+        
+        return setted;
+    
+    }
+    
     public boolean changeStatus(int machineId,String status) throws SQLException{
         
         boolean changed=false;
-        String statement = "UPDATE machines SET status=? WHERE id=?";
+        
+        if(status=="occupied"){
+            
+            String statement = "UPDATE machines SET status=?, occupiedSince=NOW() WHERE id=?";
          
+            DataSourceFactory dataSource = new DataSourceFactory();
+            Connection connection = dataSource.getConnection();
+
+            PreparedStatement query = connection.prepareStatement(statement);
+            query.setString(1,status);
+            query.setInt(2,machineId);
+
+            int rowCount = query.executeUpdate();
+
+            if(rowCount!=0){
+
+                changed=true;
+
+            }
+            
+            query.close();
+            connection.close();
+
+            
+        
+        }else{
+            
+            String statement = "UPDATE machines SET status=?, occupiedSince=DEFAULT WHERE id=?";
+         
+            DataSourceFactory dataSource = new DataSourceFactory();
+            Connection connection = dataSource.getConnection();
+
+            PreparedStatement query = connection.prepareStatement(statement);
+            query.setString(1,status);
+            query.setInt(2,machineId);
+
+            int rowCount = query.executeUpdate();
+
+            if(rowCount!=0){
+
+                changed=true;
+
+            }
+            
+            query.close();
+            connection.close();
+        
+        
+        
+        
+        }
+        
+        return changed;
+
+    }
+    
+    public ArrayList<Machine> getMachinesByStatus(String status) throws SQLException{
+    
+        ArrayList<Machine> machines = new ArrayList<>();
+        
+        String statement = "SELECT * FROM machines WHERE status=?";
+        
         DataSourceFactory dataSource = new DataSourceFactory();
         Connection connection = dataSource.getConnection();
         
         PreparedStatement query = connection.prepareStatement(statement);
         query.setString(1,status);
-        query.setInt(2,machineId);
         
-        int rowCount = query.executeUpdate();
+        ResultSet resultSet = query.executeQuery();
         
-        if(rowCount!=0){
+        while(resultSet.next()){
             
-            changed=true;
-        
+            Machine machine = new Machine();
+            
+            machine.setId(resultSet.getInt("id"));
+            machine.setName(resultSet.getNString("name"));
+            machine.setStatus(resultSet.getNString("status"));
+            machine.setName(resultSet.getNString("name"));
+            machine.setMaxCapacity(resultSet.getInt("maxcapacity"));
+            machine.setActualCapacity(resultSet.getInt("actualcapacity"));
+            
+            if(resultSet.getDate("occupiedSince")!=null){
+                
+                machine.setOccupiedSince(resultSet.getDate("occupiedSince").toString()+" "+resultSet.getTime("occupiedSince").toString());
+            }
+            
+            
+            machines.add(machine);
+
         }
         
         query.close();
+        resultSet.close();
         connection.close();
         
-        return changed;
-    
+        return machines;
     }
     
     public ArrayList<Machine> getMachines() throws SQLException{
@@ -66,6 +167,12 @@ public class MachineServices {
             machine.setName(resultSet.getNString("name"));
             machine.setMaxCapacity(resultSet.getInt("maxcapacity"));
             machine.setActualCapacity(resultSet.getInt("actualcapacity"));
+            
+            if(resultSet.getDate("occupiedSince")!=null){
+                
+                machine.setOccupiedSince(resultSet.getDate("occupiedSince").toString()+" "+resultSet.getTime("occupiedSince").toString());
+            }
+            
             
             machines.add(machine);
 
