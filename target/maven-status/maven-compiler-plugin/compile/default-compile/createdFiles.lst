@@ -6,7 +6,6 @@ Utils\ProductsUtils.class
 Model\UserServices.class
 Utils\PurchasesUtils.class
 Model\Purchase.class
-Filters\CorsFilter.class
 Model\DataSourceFactory.class
 Controller\PurchasesManagement.class
 Controller\RefillsManagement.class
@@ -29,4 +28,5 @@ Model\PurchaseServices.class
 Utils\RefillsUtils.class
 Model\User.class
 Filters\UsersFilter.class
+Jobs\ModifyStatusJob.class
 Security\PasswordEncryption.class

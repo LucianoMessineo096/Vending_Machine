@@ -101,8 +101,6 @@ public class MachinesManagement extends HttpServlet {
 
         ArrayList<Machine> machines = machineServices.getMachines();
    
-        utils.checkMachinesStatus();
-        
         machines= machineServices.getMachines();
         
         if(machines!=null){

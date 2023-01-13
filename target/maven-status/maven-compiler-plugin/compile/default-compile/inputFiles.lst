@@ -4,6 +4,7 @@ D:\CODICI\JAVA\applicazioni web\Vending_Machine\src\main\java\Filters\ProductsFi
 D:\CODICI\JAVA\applicazioni web\Vending_Machine\src\main\java\Model\RefillServices.java
 D:\CODICI\JAVA\applicazioni web\Vending_Machine\src\main\java\Model\User.java
 D:\CODICI\JAVA\applicazioni web\Vending_Machine\src\main\java\Model\Refill.java
+D:\CODICI\JAVA\applicazioni web\Vending_Machine\src\main\java\Jobs\ModifyStatusJob.java
 D:\CODICI\JAVA\applicazioni web\Vending_Machine\src\main\java\Model\Movement.java
 D:\CODICI\JAVA\applicazioni web\Vending_Machine\src\main\java\Utils\RefillsUtils.java
 D:\CODICI\JAVA\applicazioni web\Vending_Machine\src\main\java\Controller\ProductsManagement.java
@@ -24,7 +25,6 @@ D:\CODICI\JAVA\applicazioni web\Vending_Machine\src\main\java\Security\PasswordE
 D:\CODICI\JAVA\applicazioni web\Vending_Machine\src\main\java\Model\Purchase.java
 D:\CODICI\JAVA\applicazioni web\Vending_Machine\src\main\java\Filters\PurchasesFilter.java
 D:\CODICI\JAVA\applicazioni web\Vending_Machine\src\main\java\Model\UserServices.java
-D:\CODICI\JAVA\applicazioni web\Vending_Machine\src\main\java\Filters\CorsFilter.java
 D:\CODICI\JAVA\applicazioni web\Vending_Machine\src\main\java\Controller\MachinesManagement.java
 D:\CODICI\JAVA\applicazioni web\Vending_Machine\src\main\java\Model\PurchaseServices.java
 D:\CODICI\JAVA\applicazioni web\Vending_Machine\src\main\java\Filters\MachinesFilter.java

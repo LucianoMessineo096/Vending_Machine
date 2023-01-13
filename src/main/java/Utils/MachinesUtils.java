@@ -65,38 +65,4 @@ public class MachinesUtils {
             
     }
     
-    public void checkMachinesStatus() throws SQLException{
-    
-        /*
-            this method is called to check status for every machine
-            
-            when a user close the browser without passing to logout then the status remain pending in occupied
-        
-            how to resolve: if status=occupied for plus 10 minutes then machine is available again
-            
-        */
-        
-        MachineServices machineServices = new MachineServices();
-        ArrayList<Machine> occupiedMachines = machineServices.getMachinesByStatus("occupied");
-        
-        for(Machine machine : occupiedMachines){
-
-            String occupiedSince = machine.getOccupiedSince();
-            
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            LocalDateTime targetTime = LocalDateTime.parse(occupiedSince, formatter);
-            
-            LocalDateTime currentTime = LocalDateTime.now();
-            long minutesBetween = ChronoUnit.MINUTES.between(currentTime, targetTime);
-
-            if (minutesBetween > 2) {
-                
-                machineServices.changeStatus(machine.getId(), "free");
-                machineServices.setToNullOccupiedSince(machine.getId());
-            }
-               
-        }
-    
-    }
-    
 }

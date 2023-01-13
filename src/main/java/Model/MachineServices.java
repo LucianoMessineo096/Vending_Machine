@@ -47,7 +47,7 @@ public class MachineServices {
         
         boolean changed=false;
         
-        if(status=="occupied"){
+        if("occupied".equals(status)){
             
             String statement = "UPDATE machines SET status=?, occupiedSince=NOW() WHERE id=?";
          

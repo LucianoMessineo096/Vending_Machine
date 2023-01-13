@@ -10,7 +10,7 @@
 <div id="machine-mngmt">
     
     <div class="d-flex flex-row m-0 p-0 justify-content-between">
-        <button type="button" class="btn btn-success my-3"data-bs-toggle="modal" data-bs-target="#addMachineModal">Inserisci Macchinetta</button>
+        <button type="button" class="btn btn-success my-3" data-bs-toggle="modal" data-bs-target="#addMachineModal">Inserisci Macchinetta</button>
         <div id="actions" class="d-flex flex-row m-0 p-0 justify-content-between"></div>
     </div>
     
@@ -391,6 +391,8 @@
                 $('#machine-mngmt tbody').empty();
 
                 response.machines.forEach(machine=>{
+                    
+                    console.log(machine)
                     
                     machine.status==='free' || machine.status==='active' ? totalMachinesActive++ : totalMachinesDisabled++;
                     totalMachines++;
