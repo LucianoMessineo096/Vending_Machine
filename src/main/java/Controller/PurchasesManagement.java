@@ -15,6 +15,7 @@ import Model.Refill;
 import Model.RefillServices;
 import Model.User;
 import Model.UserServices;
+import Utils.MachinesUtils;
 import Utils.PurchasesUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -54,6 +55,7 @@ public class PurchasesManagement extends HttpServlet {
         MovementServices movementServices = new MovementServices();
         MachineServices machineServices = new MachineServices();
         RefillServices refillServices = new RefillServices();
+        MachinesUtils mu = new MachinesUtils();
         JSONObject Jlocation = new JSONObject();
         
         request.setCharacterEncoding("UTF-8");
@@ -95,6 +97,9 @@ public class PurchasesManagement extends HttpServlet {
                     
                     int newActualCapacity =utils.calculateNewCapacity(machine);
                     machineServices.updateMachine(machineId, newActualCapacity);
+                    
+                    //if machine is empty then is set to disable state 
+                    mu.checkMachineCapacity(machine);
 
                     Jlocation.put("success", true);
                     Jlocation.put("address", "/SmartVendingMachine/UsersManagement/personalPage");
