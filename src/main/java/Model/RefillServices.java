@@ -19,6 +19,8 @@ public class RefillServices {
     
     public boolean checkIfMachineHasBeenRefilled(int machineId) throws SQLException{
         
+        //check if exist an active refill for the specified machine
+        
         boolean check=false;
         
         String statement = "SELECT * FROM refills WHERE machId=?";

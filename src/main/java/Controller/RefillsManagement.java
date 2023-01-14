@@ -76,7 +76,7 @@ public class RefillsManagement extends HttpServlet {
     
     protected void addRefill(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, SQLException, IOException{
         
-        RefillsUtils utils = new RefillsUtils();
+        //RefillsUtils utils = new RefillsUtils();
         RefillServices refillServices = new RefillServices();
         MachineServices machineServices = new MachineServices();
         JSONObject Jlocation = new JSONObject();
@@ -93,7 +93,7 @@ public class RefillsManagement extends HttpServlet {
         int prod4Id = parseInt(request.getParameter("prod4Id"));
         int prod4Quantity = parseInt(request.getParameter("prod4Quantity"));
         
-        Integer[] insertedQuantities={prod1Quantity,prod2Quantity,prod3Quantity,prod4Quantity};
+        //Integer[] insertedQuantities={prod1Quantity,prod2Quantity,prod3Quantity,prod4Quantity};
         
         Machine machine = machineServices.getMachine(machineId);
         int maxCapacity = machine.getMaxCapacity();
@@ -101,16 +101,18 @@ public class RefillsManagement extends HttpServlet {
         
         if(actualCapacity<maxCapacity){
             
-            Refill refill = refillServices.getRefill(machineId);
+            //Refill refill = refillServices.getRefill(machineId);
             boolean machineHasBeenRefilled = refillServices.checkIfMachineHasBeenRefilled(machineId);
             
             if(machineHasBeenRefilled){
             
-                ArrayList<Integer> newQuantities = utils.updateQuantity(refill, insertedQuantities);
+                /*ArrayList<Integer> newQuantities = utils.updateQuantity(refill, insertedQuantities);
                 prod1Quantity = newQuantities.get(0);
                 prod2Quantity = newQuantities.get(1);    
                 prod3Quantity = newQuantities.get(2);
-                prod4Quantity = newQuantities.get(3);
+                prod4Quantity = newQuantities.get(3);*/
+                
+                
                 
                 boolean updated = refillServices.updateRefill(machineId, 
                                                             techId, 

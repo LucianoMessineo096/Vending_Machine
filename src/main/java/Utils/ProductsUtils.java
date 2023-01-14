@@ -16,7 +16,7 @@ public class ProductsUtils {
     
     public HashMap<Refill,Integer> getProductColumnsIndex(ArrayList<Refill> refills,int productId) throws IllegalArgumentException, IllegalAccessException{
         
-        //description : this function return an HashMap that contain the column index
+        //description : this function return an HashMap that contain the column index in db
         //              of the product for a specified refill
         
         HashMap<Refill,Integer> columnsIndex = new HashMap<>();

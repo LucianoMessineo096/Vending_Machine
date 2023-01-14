@@ -302,9 +302,7 @@ public class MachinesManagement extends HttpServlet {
             }
         
         }else{
-            
-            System.out.println("RELEASE else");
-            
+                        
             machineServices.changeStatus(machine.getId(),"disabled");
         
             Jlocation.put("success", true);

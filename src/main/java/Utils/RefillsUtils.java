@@ -15,6 +15,8 @@ import java.util.HashMap;
 public class RefillsUtils {
     
     public ArrayList<Integer> updateQuantity(Refill refill,Integer[] insertedQuantities){
+        
+        //not used 
        
        HashMap<String,Integer> quantities = new HashMap<String,Integer>();
        ArrayList<Integer> newQuantities=new ArrayList<>();

@@ -69,9 +69,6 @@
         
         function setQuantity(quantities,product){
             
-            console.log(quantities)
-            console.log(product.id)
-            
             let quantity=0;
             
             if(product.id==quantities.prod1Id){

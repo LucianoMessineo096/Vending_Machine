@@ -391,9 +391,7 @@
                 $('#machine-mngmt tbody').empty();
 
                 response.machines.forEach(machine=>{
-                    
-                    console.log(machine)
-                    
+                                        
                     machine.status==='free' || machine.status==='active' ? totalMachinesActive++ : totalMachinesDisabled++;
                     totalMachines++;
 
