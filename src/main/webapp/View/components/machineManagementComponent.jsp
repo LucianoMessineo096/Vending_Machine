@@ -404,8 +404,17 @@
                                                 '<i class="bi bi-pencil"></i>'+
                                             '</button>';
                                     
+                    let deleteBtnEnabled='<button id="deleteMachineBtn" type="button" onclick="deleteMachine" class="btn btn-outline-danger mx-1">'+
+                                            '<i class="bi bi-trash3-fill"></i>'+
+                                         '</button>';
+                                 
+                    let deleteBtnDisabled='<button id="deleteMachineBtn" type="button" onclick="deleteMachine" class="btn btn-outline-danger mx-1" disabled>'+
+                                            '<i class="bi bi-trash3-fill"></i>'+
+                                          '</button>';
+                                    
                     let status = machine.status==='disabled'? '<span class="badge text-bg-danger">'+machine.status+'</span>' : ( machine.status==='occupied'? '<span class="badge text-bg-warning">'+machine.status+'</span>' : '<span class="badge text-bg-success">'+machine.status+'</span>' );              
-                    let updateBtn = machine.actualCapacity===0 ? updateBtnDisabled : updateBtnEnabled;                
+                    let updateBtn = machine.actualCapacity===0 ? updateBtnDisabled : updateBtnEnabled;
+                    let deleteBtn = machine.status==='occupied' ? deleteBtnDisabled : deleteBtnEnabled;
                     
                     let record = '<tr id='+machine.id.toString()+'>'+'<td>'+machine.id.toString()+'</td>'+
                                  '<td>'+machine.name.toString()+'</td>'+
@@ -418,11 +427,10 @@
                                      '</button>'+
                                      updateBtn
                                      +
-                                     '<button id="deleteMachineBtn" type="button" onclick="deleteMachine" class="btn btn-outline-danger mx-1">'+
-                                         '<i class="bi bi-trash3-fill"></i>'+
-                                     '</button>'+
+                                     deleteBtn
+                                     +
                                  '</td>'+
-                                 '<td>'+message+'</td>'+
+                                 '<td style="word-wrap: break-word;min-width: 160px;max-width: 160px;">'+message+'</td>'+
                           '</tr>';
 
                     $('#machine-mngmt tbody').append(record);
@@ -528,7 +536,7 @@
     }
         
     function deleteMachine(event){
-
+        
         let parents = $(event.currentTarget).parents();
         let machineId= parseInt(parents[1].id);
 
@@ -539,8 +547,11 @@
         };
         
         $.post(url,data,(response)=>{
+            
+            console.log(response);
+            
+            response.success!==false ? showAllMachines() : $(parents[1].childNodes[6]).append(response.message);
 
-            showAllMachines();
         });
 
     }

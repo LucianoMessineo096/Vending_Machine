@@ -100,9 +100,7 @@ public class MachinesManagement extends HttpServlet {
         JSONObject Jlocation = new JSONObject();
 
         ArrayList<Machine> machines = machineServices.getMachines();
-   
-        machines= machineServices.getMachines();
-        
+           
         if(machines!=null){
             
             Jlocation.put("success", true);
@@ -135,23 +133,38 @@ public class MachinesManagement extends HttpServlet {
         int machineId = parseInt(request.getParameter("machineId"));
         
         Machine machine = machineServices.getMachine(machineId);
-        String name = machine.getName();
-        String status = machine.getStatus();
-        int maxCapacity = machine.getMaxCapacity();
-        int actualCapacity = machine.getActualCapacity();
         
-        Jlocation.put("success", true);
-        Jlocation.put("message", "macchinetta ottenuta");
-        Jlocation.put("machineId", machineId); 
-        Jlocation.put("name", name);
-        Jlocation.put("status", status);
-        Jlocation.put("maxCapacity", maxCapacity);
-        Jlocation.put("actualCapacity", actualCapacity);
-        String location = Jlocation.toString();
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(location);
-    
+        if(machine!=null){
+            
+            String name = machine.getName();
+            String status = machine.getStatus();
+            int maxCapacity = machine.getMaxCapacity();
+            int actualCapacity = machine.getActualCapacity();
+
+            Jlocation.put("success", true);
+            Jlocation.put("message", "macchinetta ottenuta");
+            Jlocation.put("machineId", machineId); 
+            Jlocation.put("name", name);
+            Jlocation.put("status", status);
+            Jlocation.put("maxCapacity", maxCapacity);
+            Jlocation.put("actualCapacity", actualCapacity);
+            String location = Jlocation.toString();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(location);
+        
+        }else{
+            
+            Jlocation.put("success", false);
+            Jlocation.put("message", "macchinetta: "+machineId+"non ottenuta");
+            String location = Jlocation.toString();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(location);
+        
+            
+        }
+        
     }
     
     protected void updateMachine(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, SQLException, IOException{
@@ -164,9 +177,10 @@ public class MachinesManagement extends HttpServlet {
         String name = request.getParameter("name");
         String status = request.getParameter("status");
         Machine machine = machineServices.getMachine(machineId);
-        boolean updated = machineServices.updateMachine(machineId, name, status);
         
         if(machine.getActualCapacity()!=0){
+            
+            boolean updated = machineServices.updateMachine(machineId, name, status);
             
             if(updated){
         
@@ -209,28 +223,46 @@ public class MachinesManagement extends HttpServlet {
         
         request.setCharacterEncoding("UTF-8");
         int machineId = parseInt(request.getParameter("machineId"));
-               
-        boolean deleted = machineServices.deleteMachine(machineId);
         
-        if(deleted){
+        boolean occupied=machineServices.checkIfMachineIsOccupied(machineId);
         
-            Jlocation.put("success", true);
-            Jlocation.put("message", "macchinetta eliminata");
-            String location = Jlocation.toString();
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write(location);
-        }
-        else{
+        if(!occupied){
+            
+            boolean deleted = machineServices.deleteMachine(machineId);
+        
+            if(deleted){
+
+                Jlocation.put("success", true);
+                Jlocation.put("message", "macchinetta eliminata");
+                String location = Jlocation.toString();
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(location);
+            }
+            else{
+
+                Jlocation.put("success", false);
+                Jlocation.put("message", "si e' presentato un errore,macchinetta non eliminata");
+                String location = Jlocation.toString();
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(location);
+
+            }
+            
+            
+        }else{
             
             Jlocation.put("success", false);
-            Jlocation.put("message", "macchinetta non eliminata");
+            Jlocation.put("message", "risorsa occupata, eliminazione non effettuata");
             String location = Jlocation.toString();
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write(location);
- 
+        
         }
+               
+        
 
     }
     
@@ -290,6 +322,8 @@ public class MachinesManagement extends HttpServlet {
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
                 response.getWriter().write(location);
+                
+                session.removeAttribute("currentSessionMachine");
 
             }
             else{
@@ -311,9 +345,11 @@ public class MachinesManagement extends HttpServlet {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write(location);
+            
+            session.removeAttribute("currentSessionMachine");
         }
         
-        session.removeAttribute("currentSessionMachine");
+        //session.removeAttribute("currentSessionMachine");
         
     }
     

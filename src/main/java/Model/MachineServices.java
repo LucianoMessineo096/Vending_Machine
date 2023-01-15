@@ -16,6 +16,34 @@ import java.util.ArrayList;
  */
 public class MachineServices {
     
+    public boolean checkIfMachineIsOccupied(int machineId) throws SQLException{
+        
+        boolean check=false;
+        
+        String statement = "SELECT * FROM machines WHERE id=? AND status='occupied'";
+         
+        DataSourceFactory dataSource = new DataSourceFactory();
+        Connection connection = dataSource.getConnection();
+
+        PreparedStatement query = connection.prepareStatement(statement);
+        query.setInt(1,machineId);
+
+        ResultSet resultSet = query.executeQuery();
+        
+        if(resultSet!=null){
+
+            check=true;
+
+        }
+
+        query.close();
+        connection.close();
+        
+        return check;
+    
+    
+    }
+    
     public boolean setToNullOccupiedSince(int machineId) throws SQLException{
         
         boolean setted=false;

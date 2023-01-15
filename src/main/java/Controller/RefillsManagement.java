@@ -112,8 +112,6 @@ public class RefillsManagement extends HttpServlet {
                 prod3Quantity = newQuantities.get(2);
                 prod4Quantity = newQuantities.get(3);*/
                 
-                
-                
                 boolean updated = refillServices.updateRefill(machineId, 
                                                             techId, 
                                                             prod1Id, prod1Quantity, 
@@ -132,7 +130,6 @@ public class RefillsManagement extends HttpServlet {
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
                     response.getWriter().write(location);
-
 
                 }
                 else{

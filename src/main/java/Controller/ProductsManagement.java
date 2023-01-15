@@ -45,6 +45,7 @@ public class ProductsManagement extends HttpServlet {
         
         RefillServices refillServices = new RefillServices();
         ProductServices productServices = new ProductServices();
+        ArrayList<Product> products = new ArrayList<>();
         JSONObject Jlocation = new JSONObject();
         
         request.setCharacterEncoding("UTF-8");
@@ -56,15 +57,13 @@ public class ProductsManagement extends HttpServlet {
         Product prod3 = productServices.getProduct(refill.getProd3Id());
         Product prod4 = productServices.getProduct(refill.getProd4Id());
         
-        ArrayList<Product> products = new ArrayList<>();
+        products.add(prod1);
+        products.add(prod2);
+        products.add(prod3);
+        products.add(prod4);
         
         if(products!=null){
             
-            products.add(prod1);
-            products.add(prod2);
-            products.add(prod3);
-            products.add(prod4);
-
             HashMap<String,Integer> prodQuantity = new HashMap<>();
             prodQuantity.put("prod1Id", refill.getProd1Id());
             prodQuantity.put("prod1Quantity", refill.getProd1Quantity());
@@ -111,7 +110,7 @@ public class ProductsManagement extends HttpServlet {
 
             Product product = productServices.getProduct(productId);
 
-            if(product.getId()!=0){
+            if(product.getId()!=0 && product!=null){
 
                 String name = product.getName();
                 float price = product.getPrice();
@@ -192,43 +191,58 @@ public class ProductsManagement extends HttpServlet {
         int productId = parseInt(request.getParameter("productId"));
         
         ArrayList<Refill> refills = refillServices.getAllRefills();
-        HashMap<Refill,Integer> columnsIndex = utils.getProductColumnsIndex(refills, productId);
         
-        for(HashMap.Entry<Refill,Integer> refill : columnsIndex.entrySet()){
-                        
-            //set 0 the specified product quantity
-            refillServices.updateRefill(refill.getValue(),productId);
+        if(refills!=null){
             
-            //update machine capacity
-            Refill machineRefill = refillServices.getRefill(refill.getKey().getMachId());
-            
-            int newActualCapacity = machineRefill.getProd1Quantity()+machineRefill.getProd2Quantity()+machineRefill.getProd3Quantity()+machineRefill.getProd4Quantity();
-            
-            machineServices.updateMachine(refill.getKey().getMachId(), newActualCapacity);
+            HashMap<Refill,Integer> columnsIndex = utils.getProductColumnsIndex(refills, productId);
+        
+            for(HashMap.Entry<Refill,Integer> refill : columnsIndex.entrySet()){
 
-        }
+                //set 0 the specified product quantity
+                refillServices.updateRefill(refill.getValue(),productId);
+
+                //update machine capacity
+                Refill machineRefill = refillServices.getRefill(refill.getKey().getMachId());
+
+                int newActualCapacity = machineRefill.getProd1Quantity()+machineRefill.getProd2Quantity()+machineRefill.getProd3Quantity()+machineRefill.getProd4Quantity();
+
+                machineServices.updateMachine(refill.getKey().getMachId(), newActualCapacity);
+
+            }
+
+            boolean deleted = productServices.deleteProduct(productId);
+
+            if(deleted){
+
+                Jlocation.put("success", true);
+                Jlocation.put("message", "prodotto eliminato");
+                String location = Jlocation.toString();
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(location);
+            }
+            else{
+
+                Jlocation.put("success", false);
+                Jlocation.put("message", "prodotto non eliminato");
+                String location = Jlocation.toString();
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(location);
+
+            }
         
-        boolean deleted = productServices.deleteProduct(productId);
+        }else{
         
-        if(deleted){
-        
-            Jlocation.put("success", true);
-            Jlocation.put("message", "prodotto eliminato");
-            String location = Jlocation.toString();
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write(location);
-        }
-        else{
-            
             Jlocation.put("success", false);
-            Jlocation.put("message", "prodotto non eliminato");
+            Jlocation.put("message", "errore durante la fase di eliminazione del prodotto; Refill non presente");
             String location = Jlocation.toString();
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write(location);
- 
+        
         }
+        
 
     }
     

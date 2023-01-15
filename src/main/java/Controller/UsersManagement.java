@@ -229,16 +229,29 @@ public class UsersManagement extends HttpServlet {
         int userId = parseInt(request.getParameter("userId"));
         
         User user = userServices.getUser(userId);
-        float walletBalance= user.getWalletBalance();
         
-        Jlocation.put("success", true);
-        Jlocation.put("message", "saldo wallet ottenuto");
-        Jlocation.put("walletBalance", walletBalance); 
-        String location = Jlocation.toString();
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(location);
+        if(user!=null){
+            
+            float walletBalance= user.getWalletBalance();
         
+            Jlocation.put("success", true);
+            Jlocation.put("message", "saldo wallet ottenuto");
+            Jlocation.put("walletBalance", walletBalance); 
+            String location = Jlocation.toString();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(location);
+        
+        }else{
+            
+            Jlocation.put("success", false);
+            Jlocation.put("message", "saldo wallet non ottenuto");
+            String location = Jlocation.toString();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(location);
+         
+        }
         
     }
     
@@ -251,26 +264,40 @@ public class UsersManagement extends HttpServlet {
         int userId = parseInt(request.getParameter("userId"));
         
         User user = userServices.getUser(userId);
-        String email = user.getEmail();
-        String password = user.getPassword();
-        String name = user.getName();
-        String surname = user.getSurname();
-        String type = user.getType();
-        float walletBalance = user.getWalletBalance();
         
-        Jlocation.put("success", true);
-        Jlocation.put("message", "Utente ottenuto");
-        Jlocation.put("userId", userId); 
-        Jlocation.put("email", email);
-        Jlocation.put("password", password);
-        Jlocation.put("name", name);
-        Jlocation.put("surname", surname);
-        Jlocation.put("type", type);
-        Jlocation.put("walletBalance", walletBalance);
-        String location = Jlocation.toString();
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(location);
+        if(user!=null){
+            
+            String email = user.getEmail();
+            String password = user.getPassword();
+            String name = user.getName();
+            String surname = user.getSurname();
+            String type = user.getType();
+            float walletBalance = user.getWalletBalance();
+
+            Jlocation.put("success", true);
+            Jlocation.put("message", "Utente ottenuto");
+            Jlocation.put("userId", userId); 
+            Jlocation.put("email", email);
+            Jlocation.put("password", password);
+            Jlocation.put("name", name);
+            Jlocation.put("surname", surname);
+            Jlocation.put("type", type);
+            Jlocation.put("walletBalance", walletBalance);
+            String location = Jlocation.toString();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(location);
+        
+        }else{
+        
+            Jlocation.put("success", false);
+            Jlocation.put("message", "Utente non ottenuto");
+            String location = Jlocation.toString();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(location);
+        }
+        
     }
     
     protected void getUpdatedUser(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, SQLException, IOException{
@@ -283,17 +310,30 @@ public class UsersManagement extends HttpServlet {
 
         User user = userServices.getUser(userId);
         
-        HttpSession session = request.getSession(false);
-        session.removeAttribute("currentSessionUser");
-        session.setAttribute("currentSessionUser",user);
+        if(user!=null){
+            
+            HttpSession session = request.getSession(false);
+            session.removeAttribute("currentSessionUser");
+            session.setAttribute("currentSessionUser",user);
 
-        Jlocation.put("success", true);
-        Jlocation.put("message", "Utente ottenuto");
-        String location = Jlocation.toString();
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(location);
-    
+            Jlocation.put("success", true);
+            Jlocation.put("message", "Utente ottenuto");
+            String location = Jlocation.toString();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(location);
+       
+        }else{
+            
+            Jlocation.put("success", false);
+            Jlocation.put("message", "Utente non ottenuto");
+            String location = Jlocation.toString();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(location);
+         
+        }
+        
     }
     
     protected void getAllUsers(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException{
@@ -303,14 +343,27 @@ public class UsersManagement extends HttpServlet {
         
         ArrayList<User> users = userService.getUsers();
         
-        Jlocation.put("success", true);
-        Jlocation.put("message", "Utenti ottenuti");
-        Jlocation.put("users", users); 
-        String location = Jlocation.toString();
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(location);
-    
+        if(users!=null){
+            
+            Jlocation.put("success", true);
+            Jlocation.put("message", "Utenti ottenuti");
+            Jlocation.put("users", users); 
+            String location = Jlocation.toString();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(location);
+        
+        }else{
+            
+            Jlocation.put("success", false);
+            Jlocation.put("message", "Utenti non ottenuti");
+            String location = Jlocation.toString();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(location);
+        
+        }
+        
     }
     
     protected void addNewUser(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, SQLException, IOException, NoSuchAlgorithmException{
