@@ -20,7 +20,8 @@ CREATE TABLE if NOT EXISTS machines(
   name varchar(255),
   status varchar(255) DEFAULT 'disabled',
   maxCapacity INTEGER DEFAULT 20,
-  actualCapacity INTEGER DEFAULT 0
+  actualCapacity INTEGER DEFAULT 0,
+  occupiedSince DATETIME
  
 );
  
@@ -100,3 +101,22 @@ INSERT INTO products(name,price,typology) VALUES('barretta','1','snack');
 #machines
 
 INSERT INTO machines(name) VALUES('Macchinetta-A');
+
+#triggers
+
+#DELIMITER &&
+
+#CREATE TRIGGER beforeConnectionToMachine BEFORE UPDATE ON smartvendingmachinedb.machines 
+#FOR EACH ROW BEGIN 
+
+	#IF (OLD.occupiedSince IS NOT NULL AND TIMESTAMPDIFF(MINUTE,OLD.occupiedSince,NOW())> 1) 
+	#THEN 
+    
+		#SET NEW.status='free';
+		#SET NEW.occupiedSince=null;
+        
+	#END IF;
+#END;
+#&&
+
+#DELIMITER ;

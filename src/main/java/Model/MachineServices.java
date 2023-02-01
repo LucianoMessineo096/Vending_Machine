@@ -29,9 +29,9 @@ public class MachineServices {
         query.setInt(1,machineId);
 
         ResultSet resultSet = query.executeQuery();
-        
-        if(resultSet!=null){
-
+                
+        if(resultSet.next()!=false){
+            
             check=true;
 
         }
